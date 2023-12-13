@@ -32,15 +32,17 @@ echoContent() {
         ;;
     esac
 }
+
 # 检查SELinux状态
 checkCentosSELinux() {
     if [[ -f "/etc/selinux/config" ]] && ! grep -q "SELINUX=disabled" <"/etc/selinux/config"; then
         echoContent yellow "# 注意事项"
         echoContent yellow "检测到SELinux已开启，请手动关闭，教程如下"
-        echoContent yellow "https://www.v2ray-agent.com/archives/1679931532764#heading-8 "
+        echoContent yellow "https://www.multi-proxy.com/archives/1679931532764#heading-8 "
         exit 0
     fi
 }
+
 checkSystem() {
     if [[ -n $(find /etc -name "redhat-release") ]] || grep </proc/version -q -i "centos"; then
         mkdir -p /etc/yum.repos.d
@@ -327,24 +329,24 @@ readInstallType() {
     singBoxConfigPath=
 
     # 1.检测安装目录
-    if [[ -d "/etc/v2ray-agent" ]]; then
+    if [[ -d "/etc/multi-proxy" ]]; then
         # 检测安装方式 v2ray-core
-        #        if [[ -d "/etc/v2ray-agent/v2ray" && -f "/etc/v2ray-agent/v2ray/v2ray" && -f "/etc/v2ray-agent/v2ray/v2ctl" ]]; then
-        #            if [[ -d "/etc/v2ray-agent/v2ray/conf" && -f "/etc/v2ray-agent/v2ray/conf/02_VLESS_TCP_inbounds.json" ]]; then
-        #                configPath=/etc/v2ray-agent/v2ray/conf/
-        #                if grep </etc/v2ray-agent/v2ray/conf/02_VLESS_TCP_inbounds.json -q '"security": "tls"'; then
+        #        if [[ -d "/etc/multi-proxy/v2ray" && -f "/etc/multi-proxy/v2ray/v2ray" && -f "/etc/multi-proxy/v2ray/v2ctl" ]]; then
+        #            if [[ -d "/etc/multi-proxy/v2ray/conf" && -f "/etc/multi-proxy/v2ray/conf/02_VLESS_TCP_inbounds.json" ]]; then
+        #                configPath=/etc/multi-proxy/v2ray/conf/
+        #                if grep </etc/multi-proxy/v2ray/conf/02_VLESS_TCP_inbounds.json -q '"security": "tls"'; then
         #                    coreInstallType=2
-        #                    ctlPath=/etc/v2ray-agent/v2ray/v2ctl
+        #                    ctlPath=/etc/multi-proxy/v2ray/v2ctl
         #                fi
         #            fi
         #        fi
 
-        if [[ -d "/etc/v2ray-agent/xray" && -f "/etc/v2ray-agent/xray/xray" ]]; then
+        if [[ -d "/etc/multi-proxy/xray" && -f "/etc/multi-proxy/xray/xray" ]]; then
             # 这里检测xray-core
-            if [[ -d "/etc/v2ray-agent/xray/conf" ]] && [[ -f "/etc/v2ray-agent/xray/conf/02_VLESS_TCP_inbounds.json" || -f "/etc/v2ray-agent/xray/conf/02_trojan_TCP_inbounds.json" || -f "/etc/v2ray-agent/xray/conf/07_VLESS_vision_reality_inbounds.json" ]]; then
+            if [[ -d "/etc/multi-proxy/xray/conf" ]] && [[ -f "/etc/multi-proxy/xray/conf/02_VLESS_TCP_inbounds.json" || -f "/etc/multi-proxy/xray/conf/02_trojan_TCP_inbounds.json" || -f "/etc/multi-proxy/xray/conf/07_VLESS_vision_reality_inbounds.json" ]]; then
                 # xray-core
-                configPath=/etc/v2ray-agent/xray/conf/
-                ctlPath=/etc/v2ray-agent/xray/xray
+                configPath=/etc/multi-proxy/xray/conf/
+                ctlPath=/etc/multi-proxy/xray/xray
                 coreInstallType=1
                 if [[ -f "${configPath}07_VLESS_vision_reality_inbounds.json" ]]; then
                     realityStatus=1
@@ -352,22 +354,22 @@ readInstallType() {
             fi
         fi
 
-        if [[ -d "/etc/v2ray-agent/hysteria" && -f "/etc/v2ray-agent/hysteria/hysteria" ]]; then
-            if [[ -d "/etc/v2ray-agent/hysteria/conf" ]] && [[ -f "/etc/v2ray-agent/hysteria/conf/config.json" ]]; then
-                hysteriaConfigPath=/etc/v2ray-agent/hysteria/conf/
+        if [[ -d "/etc/multi-proxy/hysteria" && -f "/etc/multi-proxy/hysteria/hysteria" ]]; then
+            if [[ -d "/etc/multi-proxy/hysteria/conf" ]] && [[ -f "/etc/multi-proxy/hysteria/conf/config.json" ]]; then
+                hysteriaConfigPath=/etc/multi-proxy/hysteria/conf/
             fi
         fi
 
-        if [[ -d "/etc/v2ray-agent/tuic" && -f "/etc/v2ray-agent/tuic/tuic" ]]; then
-            if [[ -d "/etc/v2ray-agent/tuic/conf" ]] && [[ -f "/etc/v2ray-agent/tuic/conf/config.json" ]]; then
-                tuicConfigPath=/etc/v2ray-agent/tuic/conf/
+        if [[ -d "/etc/multi-proxy/tuic" && -f "/etc/multi-proxy/tuic/tuic" ]]; then
+            if [[ -d "/etc/multi-proxy/tuic/conf" ]] && [[ -f "/etc/multi-proxy/tuic/conf/config.json" ]]; then
+                tuicConfigPath=/etc/multi-proxy/tuic/conf/
             fi
         fi
 
-        if [[ -d "/etc/v2ray-agent/sing-box" && -f "/etc/v2ray-agent/sing-box/sing-box" ]]; then
-            if [[ -d "/etc/v2ray-agent/sing-box/conf" ]] && [[ -f "/etc/v2ray-agent/sing-box/conf/config/tuic.json" || -f "/etc/v2ray-agent/sing-box/conf/config/hysteria2.json" ]]; then
+        if [[ -d "/etc/multi-proxy/sing-box" && -f "/etc/multi-proxy/sing-box/sing-box" ]]; then
+            if [[ -d "/etc/multi-proxy/sing-box/conf" ]] && [[ -f "/etc/multi-proxy/sing-box/conf/config/tuic.json" || -f "/etc/multi-proxy/sing-box/conf/config/hysteria2.json" ]]; then
                 #                coreInstallType=3
-                singBoxConfigPath=/etc/v2ray-agent/sing-box/conf/
+                singBoxConfigPath=/etc/multi-proxy/sing-box/conf/
             fi
         fi
 
@@ -411,10 +413,10 @@ readInstallProtocolType() {
 
     done < <(find ${configPath} -name "*inbounds.json" | awk -F "[.]" '{print $1}')
 
-    if [[ -n "${singBoxConfigPath}" ]] && [[ -f "/etc/v2ray-agent/sing-box/conf/config.json" ]] && grep -q 'hysteria2' </etc/v2ray-agent/sing-box/conf/config.json; then
+    if [[ -n "${singBoxConfigPath}" ]] && [[ -f "/etc/multi-proxy/sing-box/conf/config.json" ]] && grep -q 'hysteria2' </etc/multi-proxy/sing-box/conf/config.json; then
         currentInstallProtocolType=${currentInstallProtocolType}'6'
     fi
-    if [[ -n "${singBoxConfigPath}" ]] && [[ -f "/etc/v2ray-agent/sing-box/conf/config.json" ]] && grep -q 'tuic' </etc/v2ray-agent/sing-box/conf/config.json; then
+    if [[ -n "${singBoxConfigPath}" ]] && [[ -f "/etc/multi-proxy/sing-box/conf/config.json" ]] && grep -q 'tuic' </etc/multi-proxy/sing-box/conf/config.json; then
         currentInstallProtocolType=${currentInstallProtocolType}'9'
     fi
 }
@@ -442,9 +444,9 @@ checkBTPanel() {
                     checkBTPanel
                 else
                     domain=${btDomain}
-                    if [[ ! -f "/etc/v2ray-agent/tls/${btDomain}.crt" && ! -f "/etc/v2ray-agent/tls/${btDomain}.key" ]]; then
-                        ln -s "/www/server/panel/vhost/cert/${btDomain}/fullchain.pem" "/etc/v2ray-agent/tls/${btDomain}.crt"
-                        ln -s "/www/server/panel/vhost/cert/${btDomain}/privkey.pem" "/etc/v2ray-agent/tls/${btDomain}.key"
+                    if [[ ! -f "/etc/multi-proxy/tls/${btDomain}.crt" && ! -f "/etc/multi-proxy/tls/${btDomain}.key" ]]; then
+                        ln -s "/www/server/panel/vhost/cert/${btDomain}/fullchain.pem" "/etc/multi-proxy/tls/${btDomain}.crt"
+                        ln -s "/www/server/panel/vhost/cert/${btDomain}/privkey.pem" "/etc/multi-proxy/tls/${btDomain}.key"
                     fi
 
                     nginxStaticPath="/www/wwwroot/${btDomain}/"
@@ -566,13 +568,13 @@ readHysteriaConfig() {
 }
 # 读取Tuic配置
 readSingBoxConfig() {
-    if [[ -n "${singBoxConfigPath}" ]] && [[ -f "/etc/v2ray-agent/sing-box/conf/config.json" ]]; then
-        if grep -q 'tuic' </etc/v2ray-agent/sing-box/conf/config.json; then
+    if [[ -n "${singBoxConfigPath}" ]] && [[ -f "/etc/multi-proxy/sing-box/conf/config.json" ]]; then
+        if grep -q 'tuic' </etc/multi-proxy/sing-box/conf/config.json; then
             tuicPort=$(jq -r '.inbounds[]|select(.type=="tuic")|(.listen_port)' <"${singBoxConfigPath}config.json")
             tuicAlgorithm=$(jq -r '.inbounds[]|select(.type=="tuic")|(.congestion_control)' <"${singBoxConfigPath}config.json")
         fi
 
-        if grep -q 'hysteria2' </etc/v2ray-agent/sing-box/conf/config.json; then
+        if grep -q 'hysteria2' </etc/multi-proxy/sing-box/conf/config.json; then
             hysteriaPort=$(jq -r '.inbounds[]|select(.type=="hysteria2")|(.listen_port)' <"${singBoxConfigPath}config.json")
             hysteria2ClientUploadSpeed=$(jq -r '.inbounds[]|select(.type=="hysteria2")|(.down_mbps)' <"${singBoxConfigPath}config.json")
             hysteria2ClientDownloadSpeed=$(jq -r '.inbounds[]|select(.type=="hysteria2")|(.up_mbps)' <"${singBoxConfigPath}config.json")
@@ -582,13 +584,13 @@ readSingBoxConfig() {
 # 卸载 sing-box
 unInstallSingBox() {
     local type=$1
-    if [[ -n "${singBoxConfigPath}" ]] && [[ -f "/etc/v2ray-agent/sing-box/conf/config.json" ]]; then
-        if grep -q 'tuic' </etc/v2ray-agent/sing-box/conf/config.json && [[ "${type}" == "tuic" ]]; then
+    if [[ -n "${singBoxConfigPath}" ]] && [[ -f "/etc/multi-proxy/sing-box/conf/config.json" ]]; then
+        if grep -q 'tuic' </etc/multi-proxy/sing-box/conf/config.json && [[ "${type}" == "tuic" ]]; then
             rm "${singBoxConfigPath}config/tuic.json"
             echoContent green " ---> 删除sing-box tuic配置成功"
         fi
 
-        if grep -q 'hysteria2' </etc/v2ray-agent/sing-box/conf/config.json && [[ "${type}" == "hysteria2" ]]; then
+        if grep -q 'hysteria2' </etc/multi-proxy/sing-box/conf/config.json && [[ "${type}" == "hysteria2" ]]; then
             rm "${singBoxConfigPath}config/hysteria2.json"
             echoContent green " ---> 删除sing-box hysteria2配置成功"
         fi
@@ -604,7 +606,7 @@ unInstallSingBox() {
     else
         handleSingBox stop
         rm /etc/systemd/system/sing-box.service
-        rm -rf /etc/v2ray-agent/sing-box/*
+        rm -rf /etc/multi-proxy/sing-box/*
         echoContent green " ---> sing-box 卸载完成"
     fi
 }
@@ -778,22 +780,26 @@ showInstallStatus() {
 # 清理旧残留
 cleanUp() {
     #    if [[ "$1" == "v2rayClean" ]]; then
-    #        rm -rf "$(find /etc/v2ray-agent/v2ray/* | grep -E '(config_full.json|conf)')"
+    #        rm -rf "$(find /etc/multi-proxy/v2ray/* | grep -E '(config_full.json|conf)')"
     #        handleV2Ray stop >/dev/null
     #        rm -f /etc/systemd/system/v2ray.service
     #    el
     if [[ "$1" == "xrayClean" ]]; then
-        rm -rf "$(find /etc/v2ray-agent/xray/* | grep -E '(config_full.json|conf)')"
+        rm -rf "$(find /etc/multi-proxy/xray/* | grep -E '(config_full.json|conf)')"
         handleXray stop >/dev/null
         rm -f /etc/systemd/system/xray.service
 
     elif [[ "$1" == "v2rayDel" ]]; then
-        rm -rf /etc/v2ray-agent/v2ray/*
+        rm -rf /etc/multi-proxy/v2ray/*
 
     elif [[ "$1" == "xrayDel" ]]; then
-        rm -rf /etc/v2ray-agent/xray/*
+        rm -rf /etc/multi-proxy/xray/*
     fi
 }
+
+
+# 主函数
+# ==================== 初始化 =============================
 initVar "$1"
 checkSystem
 checkCPUVendor
@@ -807,31 +813,31 @@ readXrayCoreRealityConfig
 
 # 初始化安装目录
 mkdirTools() {
-    mkdir -p /etc/v2ray-agent/tls
-    mkdir -p /etc/v2ray-agent/subscribe_local/default
-    mkdir -p /etc/v2ray-agent/subscribe_local/clashMeta
+    mkdir -p /etc/multi-proxy/tls
+    mkdir -p /etc/multi-proxy/subscribe_local/default
+    mkdir -p /etc/multi-proxy/subscribe_local/clashMeta
 
-    mkdir -p /etc/v2ray-agent/subscribe_remote/default
-    mkdir -p /etc/v2ray-agent/subscribe_remote/clashMeta
+    mkdir -p /etc/multi-proxy/subscribe_remote/default
+    mkdir -p /etc/multi-proxy/subscribe_remote/clashMeta
 
-    mkdir -p /etc/v2ray-agent/subscribe/default
-    mkdir -p /etc/v2ray-agent/subscribe/clashMetaProfiles
-    mkdir -p /etc/v2ray-agent/subscribe/clashMeta
+    mkdir -p /etc/multi-proxy/subscribe/default
+    mkdir -p /etc/multi-proxy/subscribe/clashMetaProfiles
+    mkdir -p /etc/multi-proxy/subscribe/clashMeta
 
-    mkdir -p /etc/v2ray-agent/v2ray/conf
-    mkdir -p /etc/v2ray-agent/v2ray/tmp
-    mkdir -p /etc/v2ray-agent/xray/conf
-    mkdir -p /etc/v2ray-agent/xray/reality_scan
-    mkdir -p /etc/v2ray-agent/xray/tmp
-    mkdir -p /etc/v2ray-agent/hysteria/conf
+    mkdir -p /etc/multi-proxy/v2ray/conf
+    mkdir -p /etc/multi-proxy/v2ray/tmp
+    mkdir -p /etc/multi-proxy/xray/conf
+    mkdir -p /etc/multi-proxy/xray/reality_scan
+    mkdir -p /etc/multi-proxy/xray/tmp
+    mkdir -p /etc/multi-proxy/hysteria/conf
     mkdir -p /etc/systemd/system/
-    mkdir -p /tmp/v2ray-agent-tls/
+    mkdir -p /tmp/multi-proxy-tls/
 
-    mkdir -p /etc/v2ray-agent/warp
+    mkdir -p /etc/multi-proxy/warp
 
-    mkdir -p /etc/v2ray-agent/tuic/conf
+    mkdir -p /etc/multi-proxy/tuic/conf
 
-    mkdir -p /etc/v2ray-agent/sing-box/conf/config
+    mkdir -p /etc/multi-proxy/sing-box/conf/config
 }
 
 # 安装工具包
@@ -848,8 +854,8 @@ installTools() {
 
     echoContent green " ---> 检查、安装更新【新机器会很慢，如长时间无反应，请手动停止后重新执行】"
 
-    ${upgrade} >/etc/v2ray-agent/install.log 2>&1
-    if grep <"/etc/v2ray-agent/install.log" -q "changed"; then
+    ${upgrade} >/etc/multi-proxy/install.log 2>&1
+    if grep <"/etc/multi-proxy/install.log" -q "changed"; then
         ${updateReleaseInfoChange} >/dev/null 2>&1
     fi
 
@@ -984,11 +990,11 @@ installTools() {
     else
         if [[ ! -d "$HOME/.acme.sh" ]] || [[ -d "$HOME/.acme.sh" && -z $(find "$HOME/.acme.sh/acme.sh") ]]; then
             echoContent green " ---> 安装acme.sh"
-            curl -s https://get.acme.sh | sh >/etc/v2ray-agent/tls/acme.log 2>&1
+            curl -s https://get.acme.sh | sh >/etc/multi-proxy/tls/acme.log 2>&1
 
             if [[ ! -d "$HOME/.acme.sh" ]] || [[ -z $(find "$HOME/.acme.sh/acme.sh") ]]; then
                 echoContent red "  acme安装失败--->"
-                tail -n 100 /etc/v2ray-agent/tls/acme.log
+                tail -n 100 /etc/multi-proxy/tls/acme.log
                 echoContent yellow "错误排查:"
                 echoContent red "  1.获取Github文件失败，请等待Github恢复后尝试，恢复进度可查看 [https://www.githubstatus.com/]"
                 echoContent red "  2.acme.sh脚本出现bug，可查看[https://github.com/acmesh-official/acme.sh] issues"
@@ -1193,12 +1199,12 @@ initTLSNginxConfig() {
             echoContent yellow "\n ---> 域名: ${domain}"
         else
             echo
-            echoContent yellow "请输入要配置的域名 例: www.v2ray-agent.com --->"
+            echoContent yellow "请输入要配置的域名 例: www.multi-proxy.com --->"
             read -r -p "域名:" domain
         fi
     else
         echo
-        echoContent yellow "请输入要配置的域名 例: www.v2ray-agent.com --->"
+        echoContent yellow "请输入要配置的域名 例: www.multi-proxy.com --->"
         read -r -p "域名:" domain
     fi
 
@@ -1256,7 +1262,7 @@ server {
 
 	location ~ ^/s/(clashMeta|default|clashMetaProfiles)/(.*) {
         default_type 'text/plain; charset=utf-8';
-        alias /etc/v2ray-agent/subscribe/\$1/\$2;
+        alias /etc/multi-proxy/subscribe/\$1/\$2;
     }
 
     location /${currentPath}grpc {
@@ -1292,7 +1298,7 @@ server {
 	root ${nginxStaticPath};
 	location ~ ^/s/(clashMeta|default|clashMetaProfiles)/(.*) {
         default_type 'text/plain; charset=utf-8';
-        alias /etc/v2ray-agent/subscribe/\$1/\$2;
+        alias /etc/multi-proxy/subscribe/\$1/\$2;
     }
 	location /${currentPath}grpc {
 		client_max_body_size 0;
@@ -1315,7 +1321,7 @@ server {
 	root ${nginxStaticPath};
 	location ~ ^/s/(clashMeta|default|clashMetaProfiles)/(.*) {
         default_type 'text/plain; charset=utf-8';
-        alias /etc/v2ray-agent/subscribe/\$1/\$2;
+        alias /etc/multi-proxy/subscribe/\$1/\$2;
     }
 	location /${currentPath}trojangrpc {
 		client_max_body_size 0;
@@ -1340,7 +1346,7 @@ server {
 
     location ~ ^/s/(clashMeta|default|clashMetaProfiles)/(.*) {
             default_type 'text/plain; charset=utf-8';
-            alias /etc/v2ray-agent/subscribe/\$1/\$2;
+            alias /etc/multi-proxy/subscribe/\$1/\$2;
         }
 	location / {
 	}
@@ -1355,7 +1361,7 @@ server {
 	root ${nginxStaticPath};
 	location ~ ^/s/(clashMeta|default|clashMetaProfiles)/(.*) {
             default_type 'text/plain; charset=utf-8';
-            alias /etc/v2ray-agent/subscribe/\$1/\$2;
+            alias /etc/multi-proxy/subscribe/\$1/\$2;
         }
 	location / {
 	}
@@ -1441,7 +1447,7 @@ switchDNSAPI() {
 # 初始化dns配置
 initDNSAPIConfig() {
     if [[ "$1" == "cloudflare" ]]; then
-        echoContent yellow "\n CF_Token参考配置教程：https://www.v2ray-agent.com/archives/1701160377972\n"
+        echoContent yellow "\n CF_Token参考配置教程：https://www.multi-proxy.com/archives/1701160377972\n"
         read -r -p "请输入API Token:" cfAPIToken
         if [[ -z "${cfAPIToken}" ]]; then
             echoContent red " ---> 输入为空，请重新输入"
@@ -1482,7 +1488,7 @@ switchSSLType() {
             echoContent red " ---> buypass不支持API申请证书"
             exit 0
         fi
-        echo "${sslType}" >/etc/v2ray-agent/tls/ssl_type
+        echo "${sslType}" >/etc/multi-proxy/tls/ssl_type
     fi
 }
 
@@ -1503,10 +1509,10 @@ selectAcmeInstallSSL() {
 acmeInstallSSL() {
     if [[ -n "${dnsAPIType}" ]]; then
         echoContent green " ---> 生成通配符证书中"
-        sudo CF_Token="${cfAPIToken}" "$HOME/.acme.sh/acme.sh" --issue -d "*.${dnsTLSDomain}" --dns dns_cf -k ec-256 --server "${sslType}" ${installSSLIPv6} 2>&1 | tee -a /etc/v2ray-agent/tls/acme.log >/dev/null
+        sudo CF_Token="${cfAPIToken}" "$HOME/.acme.sh/acme.sh" --issue -d "*.${dnsTLSDomain}" --dns dns_cf -k ec-256 --server "${sslType}" ${installSSLIPv6} 2>&1 | tee -a /etc/multi-proxy/tls/acme.log >/dev/null
     else
         echoContent green " ---> 生成证书中"
-        sudo "$HOME/.acme.sh/acme.sh" --issue -d "${tlsDomain}" --standalone -k ec-256 --server "${sslType}" ${installSSLIPv6} 2>&1 | tee -a /etc/v2ray-agent/tls/acme.log >/dev/null
+        sudo "$HOME/.acme.sh/acme.sh" --issue -d "${tlsDomain}" --standalone -k ec-256 --server "${sslType}" ${installSSLIPv6} 2>&1 | tee -a /etc/multi-proxy/tls/acme.log >/dev/null
     fi
 }
 # 自定义端口
@@ -1579,22 +1585,22 @@ installTLS() {
     local tlsDomain=${domain}
 
     # 安装tls
-    if [[ -f "/etc/v2ray-agent/tls/${tlsDomain}.crt" && -f "/etc/v2ray-agent/tls/${tlsDomain}.key" && -n $(cat "/etc/v2ray-agent/tls/${tlsDomain}.crt") ]] || [[ -d "$HOME/.acme.sh/${tlsDomain}_ecc" && -f "$HOME/.acme.sh/${tlsDomain}_ecc/${tlsDomain}.key" && -f "$HOME/.acme.sh/${tlsDomain}_ecc/${tlsDomain}.cer" ]] || [[ "${installedDNSAPIStatus}" == "true" ]]; then
+    if [[ -f "/etc/multi-proxy/tls/${tlsDomain}.crt" && -f "/etc/multi-proxy/tls/${tlsDomain}.key" && -n $(cat "/etc/multi-proxy/tls/${tlsDomain}.crt") ]] || [[ -d "$HOME/.acme.sh/${tlsDomain}_ecc" && -f "$HOME/.acme.sh/${tlsDomain}_ecc/${tlsDomain}.key" && -f "$HOME/.acme.sh/${tlsDomain}_ecc/${tlsDomain}.cer" ]] || [[ "${installedDNSAPIStatus}" == "true" ]]; then
         echoContent green " ---> 检测到证书"
         renewalTLS
 
-        if [[ -z $(find /etc/v2ray-agent/tls/ -name "${tlsDomain}.crt") ]] || [[ -z $(find /etc/v2ray-agent/tls/ -name "${tlsDomain}.key") ]] || [[ -z $(cat "/etc/v2ray-agent/tls/${tlsDomain}.crt") ]]; then
+        if [[ -z $(find /etc/multi-proxy/tls/ -name "${tlsDomain}.crt") ]] || [[ -z $(find /etc/multi-proxy/tls/ -name "${tlsDomain}.key") ]] || [[ -z $(cat "/etc/multi-proxy/tls/${tlsDomain}.crt") ]]; then
             if [[ "${installedDNSAPIStatus}" == "true" ]]; then
-                sudo "$HOME/.acme.sh/acme.sh" --installcert -d "*.${dnsTLSDomain}" --fullchainpath "/etc/v2ray-agent/tls/${tlsDomain}.crt" --keypath "/etc/v2ray-agent/tls/${tlsDomain}.key" --ecc >/dev/null
+                sudo "$HOME/.acme.sh/acme.sh" --installcert -d "*.${dnsTLSDomain}" --fullchainpath "/etc/multi-proxy/tls/${tlsDomain}.crt" --keypath "/etc/multi-proxy/tls/${tlsDomain}.key" --ecc >/dev/null
             else
-                sudo "$HOME/.acme.sh/acme.sh" --installcert -d "${tlsDomain}" --fullchainpath "/etc/v2ray-agent/tls/${tlsDomain}.crt" --keypath "/etc/v2ray-agent/tls/${tlsDomain}.key" --ecc >/dev/null
+                sudo "$HOME/.acme.sh/acme.sh" --installcert -d "${tlsDomain}" --fullchainpath "/etc/multi-proxy/tls/${tlsDomain}.crt" --keypath "/etc/multi-proxy/tls/${tlsDomain}.key" --ecc >/dev/null
             fi
 
         else
             echoContent yellow " ---> 如未过期或者自定义证书请选择[n]\n"
             read -r -p "是否重新安装？[y/n]:" reInstallStatus
             if [[ "${reInstallStatus}" == "y" ]]; then
-                rm -rf /etc/v2ray-agent/tls/*
+                rm -rf /etc/multi-proxy/tls/*
                 installTLS "$1"
             fi
         fi
@@ -1612,13 +1618,13 @@ installTLS() {
         selectAcmeInstallSSL
 
         if [[ "${installedDNSAPIStatus}" == "true" ]]; then
-            sudo "$HOME/.acme.sh/acme.sh" --installcert -d "*.${dnsTLSDomain}" --fullchainpath "/etc/v2ray-agent/tls/${tlsDomain}.crt" --keypath "/etc/v2ray-agent/tls/${tlsDomain}.key" --ecc >/dev/null
+            sudo "$HOME/.acme.sh/acme.sh" --installcert -d "*.${dnsTLSDomain}" --fullchainpath "/etc/multi-proxy/tls/${tlsDomain}.crt" --keypath "/etc/multi-proxy/tls/${tlsDomain}.key" --ecc >/dev/null
         else
-            sudo "$HOME/.acme.sh/acme.sh" --installcert -d "${tlsDomain}" --fullchainpath "/etc/v2ray-agent/tls/${tlsDomain}.crt" --keypath "/etc/v2ray-agent/tls/${tlsDomain}.key" --ecc >/dev/null
+            sudo "$HOME/.acme.sh/acme.sh" --installcert -d "${tlsDomain}" --fullchainpath "/etc/multi-proxy/tls/${tlsDomain}.crt" --keypath "/etc/multi-proxy/tls/${tlsDomain}.key" --ecc >/dev/null
         fi
 
-        if [[ ! -f "/etc/v2ray-agent/tls/${tlsDomain}.crt" || ! -f "/etc/v2ray-agent/tls/${tlsDomain}.key" ]] || [[ -z $(cat "/etc/v2ray-agent/tls/${tlsDomain}.key") || -z $(cat "/etc/v2ray-agent/tls/${tlsDomain}.crt") ]]; then
-            tail -n 10 /etc/v2ray-agent/tls/acme.log
+        if [[ ! -f "/etc/multi-proxy/tls/${tlsDomain}.crt" || ! -f "/etc/multi-proxy/tls/${tlsDomain}.key" ]] || [[ -z $(cat "/etc/multi-proxy/tls/${tlsDomain}.key") || -z $(cat "/etc/multi-proxy/tls/${tlsDomain}.crt") ]]; then
+            tail -n 10 /etc/multi-proxy/tls/acme.log
             if [[ ${installTLSCount} == "1" ]]; then
                 echoContent red " ---> TLS安装失败，请检查acme日志"
                 exit 0
@@ -1627,7 +1633,7 @@ installTLS() {
             installTLSCount=1
             echo
 
-            if tail -n 10 /etc/v2ray-agent/tls/acme.log | grep -q "Could not validate email address as valid"; then
+            if tail -n 10 /etc/multi-proxy/tls/acme.log | grep -q "Could not validate email address as valid"; then
                 echoContent red " ---> 邮箱无法通过SSL厂商验证，请重新输入"
                 echo
                 customSSLEmail "validate email"
@@ -1696,7 +1702,7 @@ nginxBlog() {
         if [[ "${nginxBlogInstallStatus}" == "y" ]]; then
             rm -rf "${nginxStaticPath}"
             randomNum=$((RANDOM % 6 + 1))
-            wget -q -P "${nginxStaticPath}" https://raw.githubusercontent.com/mack-a/v2ray-agent/master/fodder/blog/unable/html${randomNum}.zip >/dev/null
+            wget -q -P "${nginxStaticPath}" https://raw.githubusercontent.com/mack-a/multi-proxy/master/fodder/blog/unable/html${randomNum}.zip >/dev/null
             unzip -o "${nginxStaticPath}html${randomNum}.zip" -d "${nginxStaticPath}" >/dev/null
             rm -f "${nginxStaticPath}html${randomNum}.zip*"
             echoContent green " ---> 添加伪装站点成功"
@@ -1704,7 +1710,7 @@ nginxBlog() {
     else
         randomNum=$((RANDOM % 6 + 1))
         rm -rf "${nginxStaticPath}"
-        wget -q -P "${nginxStaticPath}" https://raw.githubusercontent.com/mack-a/v2ray-agent/master/fodder/blog/unable/html${randomNum}.zip >/dev/null
+        wget -q -P "${nginxStaticPath}" https://raw.githubusercontent.com/mack-a/multi-proxy/master/fodder/blog/unable/html${randomNum}.zip >/dev/null
         unzip -o "${nginxStaticPath}html${randomNum}.zip" -d "${nginxStaticPath}" >/dev/null
         rm -f "${nginxStaticPath}html${randomNum}.zip*"
         echoContent green " ---> 添加伪装站点成功"
@@ -1715,9 +1721,9 @@ nginxBlog() {
 # 修改http_port_t端口
 updateSELinuxHTTPPortT() {
 
-    $(find /usr/bin /usr/sbin | grep -w journalctl) -xe >/etc/v2ray-agent/nginx_error.log 2>&1
+    $(find /usr/bin /usr/sbin | grep -w journalctl) -xe >/etc/multi-proxy/nginx_error.log 2>&1
 
-    if find /usr/bin /usr/sbin | grep -q -w semanage && find /usr/bin /usr/sbin | grep -q -w getenforce && grep -E "31300|31302" </etc/v2ray-agent/nginx_error.log | grep -q "Permission denied"; then
+    if find /usr/bin /usr/sbin | grep -q -w semanage && find /usr/bin /usr/sbin | grep -q -w getenforce && grep -E "31300|31302" </etc/multi-proxy/nginx_error.log | grep -q "Permission denied"; then
         echoContent red " ---> 检查SELinux端口是否开放"
         if ! $(find /usr/bin /usr/sbin | grep -w semanage) port -l | grep http_port | grep -q 31300; then
             $(find /usr/bin /usr/sbin | grep -w semanage) port -a -t http_port_t -p tcp 31300
@@ -1739,7 +1745,7 @@ updateSELinuxHTTPPortT() {
 handleNginx() {
 
     if [[ -z $(pgrep -f "nginx") ]] && [[ "$1" == "start" ]]; then
-        systemctl start nginx 2>/etc/v2ray-agent/nginx_error.log
+        systemctl start nginx 2>/etc/multi-proxy/nginx_error.log
 
         sleep 0.5
 
@@ -1747,7 +1753,7 @@ handleNginx() {
             echoContent red " ---> Nginx启动失败"
             echoContent red " ---> 请手动尝试安装nginx后，再次执行脚本"
 
-            if grep -q "journalctl -xe" </etc/v2ray-agent/nginx_error.log; then
+            if grep -q "journalctl -xe" </etc/multi-proxy/nginx_error.log; then
                 updateSELinuxHTTPPortT
             fi
         else
@@ -1768,12 +1774,12 @@ handleNginx() {
 installCronTLS() {
     if [[ -z "${btDomain}" ]]; then
         echoContent skyBlue "\n进度 $1/${totalProgress} : 添加定时维护证书"
-        crontab -l >/etc/v2ray-agent/backup_crontab.cron
+        crontab -l >/etc/multi-proxy/backup_crontab.cron
         local historyCrontab
-        historyCrontab=$(sed '/v2ray-agent/d;/acme.sh/d' /etc/v2ray-agent/backup_crontab.cron)
-        echo "${historyCrontab}" >/etc/v2ray-agent/backup_crontab.cron
-        echo "30 1 * * * /bin/bash /etc/v2ray-agent/install.sh RenewTLS >> /etc/v2ray-agent/crontab_tls.log 2>&1" >>/etc/v2ray-agent/backup_crontab.cron
-        crontab /etc/v2ray-agent/backup_crontab.cron
+        historyCrontab=$(sed '/multi-proxy/d;/acme.sh/d' /etc/multi-proxy/backup_crontab.cron)
+        echo "${historyCrontab}" >/etc/multi-proxy/backup_crontab.cron
+        echo "30 1 * * * /bin/bash /etc/multi-proxy/install.sh RenewTLS >> /etc/multi-proxy/crontab_tls.log 2>&1" >>/etc/multi-proxy/backup_crontab.cron
+        crontab /etc/multi-proxy/backup_crontab.cron
         echoContent green "\n ---> 添加定时维护证书成功"
     fi
 }
@@ -1785,9 +1791,9 @@ installCronUpdateGeo() {
             exit 0
         fi
         echoContent skyBlue "\n进度 1/1 : 添加定时更新geo文件"
-        crontab -l >/etc/v2ray-agent/backup_crontab.cron
-        echo "35 1 * * * /bin/bash /etc/v2ray-agent/install.sh UpdateGeo >> /etc/v2ray-agent/crontab_tls.log 2>&1" >>/etc/v2ray-agent/backup_crontab.cron
-        crontab /etc/v2ray-agent/backup_crontab.cron
+        crontab -l >/etc/multi-proxy/backup_crontab.cron
+        echo "35 1 * * * /bin/bash /etc/multi-proxy/install.sh UpdateGeo >> /etc/multi-proxy/crontab_tls.log 2>&1" >>/etc/multi-proxy/backup_crontab.cron
+        crontab /etc/multi-proxy/backup_crontab.cron
         echoContent green "\n ---> 添加定时更新geo文件成功"
     fi
 }
@@ -1804,8 +1810,8 @@ renewalTLS() {
         domain=${tlsDomain}
     fi
 
-    if [[ -f "/etc/v2ray-agent/tls/ssl_type" ]]; then
-        if grep -q "buypass" <"/etc/v2ray-agent/tls/ssl_type"; then
+    if [[ -f "/etc/multi-proxy/tls/ssl_type" ]]; then
+        if grep -q "buypass" <"/etc/multi-proxy/tls/ssl_type"; then
             sslRenewalDays=180
         fi
     fi
@@ -1846,7 +1852,7 @@ renewalTLS() {
             fi
 
             sudo "$HOME/.acme.sh/acme.sh" --cron --home "$HOME/.acme.sh"
-            sudo "$HOME/.acme.sh/acme.sh" --installcert -d "${domain}" --fullchainpath /etc/v2ray-agent/tls/"${domain}.crt" --keypath /etc/v2ray-agent/tls/"${domain}.key" --ecc
+            sudo "$HOME/.acme.sh/acme.sh" --installcert -d "${domain}" --fullchainpath /etc/multi-proxy/tls/"${domain}.crt" --keypath /etc/multi-proxy/tls/"${domain}.key" --ecc
             reloadCore
             handleNginx start
         else
@@ -1894,25 +1900,25 @@ installV2Ray() {
 
         echoContent green " ---> v2ray-core版本:${version}"
         #        if wget --help | grep -q show-progress; then
-        wget -c -q "${wgetShowProgressStatus}" -P /etc/v2ray-agent/v2ray/ "https://github.com/v2fly/v2ray-core/releases/download/${version}/${v2rayCoreCPUVendor}.zip"
+        wget -c -q "${wgetShowProgressStatus}" -P /etc/multi-proxy/v2ray/ "https://github.com/v2fly/v2ray-core/releases/download/${version}/${v2rayCoreCPUVendor}.zip"
         #        else
-        #            wget -c -P /etc/v2ray-agent/v2ray/ "https://github.com/v2fly/v2ray-core/releases/download/${version}/${v2rayCoreCPUVendor}.zip" >/dev/null 2>&1
+        #            wget -c -P /etc/multi-proxy/v2ray/ "https://github.com/v2fly/v2ray-core/releases/download/${version}/${v2rayCoreCPUVendor}.zip" >/dev/null 2>&1
         #        fi
 
-        unzip -o "/etc/v2ray-agent/v2ray/${v2rayCoreCPUVendor}.zip" -d /etc/v2ray-agent/v2ray >/dev/null
-        rm -rf "/etc/v2ray-agent/v2ray/${v2rayCoreCPUVendor}.zip"
+        unzip -o "/etc/multi-proxy/v2ray/${v2rayCoreCPUVendor}.zip" -d /etc/multi-proxy/v2ray >/dev/null
+        rm -rf "/etc/multi-proxy/v2ray/${v2rayCoreCPUVendor}.zip"
     else
         if [[ "${selectCoreType}" == "3" ]]; then
             echoContent green " ---> 锁定v2ray-core版本为v4.32.1"
-            rm -f /etc/v2ray-agent/v2ray/v2ray
-            rm -f /etc/v2ray-agent/v2ray/v2ctl
+            rm -f /etc/multi-proxy/v2ray/v2ray
+            rm -f /etc/multi-proxy/v2ray/v2ctl
             installV2Ray "$1"
         else
-            echoContent green " ---> v2ray-core版本:$(/etc/v2ray-agent/v2ray/v2ray --version | awk '{print $2}' | head -1)"
+            echoContent green " ---> v2ray-core版本:$(/etc/multi-proxy/v2ray/v2ray --version | awk '{print $2}' | head -1)"
             read -r -p "是否更新、升级？[y/n]:" reInstallV2RayStatus
             if [[ "${reInstallV2RayStatus}" == "y" ]]; then
-                rm -f /etc/v2ray-agent/v2ray/v2ray
-                rm -f /etc/v2ray-agent/v2ray/v2ctl
+                rm -f /etc/multi-proxy/v2ray/v2ray
+                rm -f /etc/multi-proxy/v2ray/v2ctl
                 installV2Ray "$1"
             fi
         fi
@@ -1929,14 +1935,14 @@ installHysteria() {
         version=$(curl -s "https://api.github.com/repos/apernet/hysteria/releases?per_page=10" | jq -r ".[]|select (.prerelease==${prereleaseStatus})|.tag_name" | grep "app/" | head -1)
 
         echoContent green " ---> Hysteria版本:${version}"
-        wget -c -q "${wgetShowProgressStatus}" -P /etc/v2ray-agent/hysteria/ "https://github.com/apernet/hysteria/releases/download/${version}/${hysteriaCoreCPUVendor}"
-        mv "/etc/v2ray-agent/hysteria/${hysteriaCoreCPUVendor}" /etc/v2ray-agent/hysteria/hysteria
-        chmod 655 /etc/v2ray-agent/hysteria/hysteria
+        wget -c -q "${wgetShowProgressStatus}" -P /etc/multi-proxy/hysteria/ "https://github.com/apernet/hysteria/releases/download/${version}/${hysteriaCoreCPUVendor}"
+        mv "/etc/multi-proxy/hysteria/${hysteriaCoreCPUVendor}" /etc/multi-proxy/hysteria/hysteria
+        chmod 655 /etc/multi-proxy/hysteria/hysteria
     else
-        echoContent green " ---> Hysteria版本:$(/etc/v2ray-agent/hysteria/hysteria version | grep "Version:" | awk '{print $2}')"
+        echoContent green " ---> Hysteria版本:$(/etc/multi-proxy/hysteria/hysteria version | grep "Version:" | awk '{print $2}')"
         read -r -p "是否更新、升级？[y/n]:" reInstallHysteriaStatus
         if [[ "${reInstallHysteriaStatus}" == "y" ]]; then
-            rm -f /etc/v2ray-agent/hysteria/hysteria
+            rm -f /etc/multi-proxy/hysteria/hysteria
             installHysteria "$1"
         fi
     fi
@@ -1954,19 +1960,19 @@ installSingBox() {
 
         echoContent green " ---> sing-box版本:${version}"
 
-        wget -c -q "${wgetShowProgressStatus}" -P /etc/v2ray-agent/sing-box/ "https://github.com/SagerNet/sing-box/releases/download/${version}/sing-box-${version/v/}${singBoxCoreCPUVendor}.tar.gz"
+        wget -c -q "${wgetShowProgressStatus}" -P /etc/multi-proxy/sing-box/ "https://github.com/SagerNet/sing-box/releases/download/${version}/sing-box-${version/v/}${singBoxCoreCPUVendor}.tar.gz"
 
-        tar zxvf "/etc/v2ray-agent/sing-box/sing-box-${version/v/}${singBoxCoreCPUVendor}.tar.gz" -C "/etc/v2ray-agent/sing-box/" >/dev/null 2>&1
+        tar zxvf "/etc/multi-proxy/sing-box/sing-box-${version/v/}${singBoxCoreCPUVendor}.tar.gz" -C "/etc/multi-proxy/sing-box/" >/dev/null 2>&1
 
-        mv "/etc/v2ray-agent/sing-box/sing-box-${version/v/}${singBoxCoreCPUVendor}/sing-box" /etc/v2ray-agent/sing-box/sing-box
-        rm -rf /etc/v2ray-agent/sing-box/sing-box-*
-        chmod 655 /etc/v2ray-agent/sing-box/sing-box
+        mv "/etc/multi-proxy/sing-box/sing-box-${version/v/}${singBoxCoreCPUVendor}/sing-box" /etc/multi-proxy/sing-box/sing-box
+        rm -rf /etc/multi-proxy/sing-box/sing-box-*
+        chmod 655 /etc/multi-proxy/sing-box/sing-box
 
     else
-        echoContent green " ---> sing-box版本:v$(/etc/v2ray-agent/sing-box/sing-box version | grep "sing-box version" | awk '{print $3}')"
+        echoContent green " ---> sing-box版本:v$(/etc/multi-proxy/sing-box/sing-box version | grep "sing-box version" | awk '{print $3}')"
         read -r -p "是否更新、升级？[y/n]:" reInstallSingBoxStatus
         if [[ "${reInstallSingBoxStatus}" == "y" ]]; then
-            rm -f /etc/v2ray-agent/sing-box/sing-box
+            rm -f /etc/multi-proxy/sing-box/sing-box
             installSingBox "$1"
         fi
     fi
@@ -1983,14 +1989,14 @@ installTuic() {
         version=$(curl -s "https://api.github.com/repos/EAimTY/tuic/releases?per_page=1" | jq -r '.[]|select (.prerelease==false)|.tag_name')
 
         echoContent green " ---> Tuic版本:${version}"
-        wget -c -q "${wgetShowProgressStatus}" -P /etc/v2ray-agent/tuic/ "https://github.com/EAimTY/tuic/releases/download/${version}/${version}${tuicCoreCPUVendor}"
-        mv "/etc/v2ray-agent/tuic/${version}${tuicCoreCPUVendor}" /etc/v2ray-agent/tuic/tuic
-        chmod 655 /etc/v2ray-agent/tuic/tuic
+        wget -c -q "${wgetShowProgressStatus}" -P /etc/multi-proxy/tuic/ "https://github.com/EAimTY/tuic/releases/download/${version}/${version}${tuicCoreCPUVendor}"
+        mv "/etc/multi-proxy/tuic/${version}${tuicCoreCPUVendor}" /etc/multi-proxy/tuic/tuic
+        chmod 655 /etc/multi-proxy/tuic/tuic
     else
-        echoContent green " ---> Tuic版本:$(/etc/v2ray-agent/tuic/tuic -v)"
+        echoContent green " ---> Tuic版本:$(/etc/multi-proxy/tuic/tuic -v)"
         read -r -p "是否更新、升级？[y/n]:" reInstallTuicStatus
         if [[ "${reInstallTuicStatus}" == "y" ]]; then
-            rm -f /etc/v2ray-agent/tuic/tuic
+            rm -f /etc/multi-proxy/tuic/tuic
             tuicConfigPath=
             installTuic "$1"
         fi
@@ -2019,29 +2025,29 @@ installXray() {
 
         echoContent green " ---> Xray-core版本:${version}"
 
-        wget -c -q "${wgetShowProgressStatus}" -P /etc/v2ray-agent/xray/ "https://github.com/XTLS/Xray-core/releases/download/${version}/${xrayCoreCPUVendor}.zip"
-        if [[ ! -f "/etc/v2ray-agent/xray/${xrayCoreCPUVendor}.zip" ]]; then
+        wget -c -q "${wgetShowProgressStatus}" -P /etc/multi-proxy/xray/ "https://github.com/XTLS/Xray-core/releases/download/${version}/${xrayCoreCPUVendor}.zip"
+        if [[ ! -f "/etc/multi-proxy/xray/${xrayCoreCPUVendor}.zip" ]]; then
             echoContent red " ---> 核心下载失败，请重新尝试安装"
             exit 0
         fi
 
-        unzip -o "/etc/v2ray-agent/xray/${xrayCoreCPUVendor}.zip" -d /etc/v2ray-agent/xray >/dev/null
-        rm -rf "/etc/v2ray-agent/xray/${xrayCoreCPUVendor}.zip"
+        unzip -o "/etc/multi-proxy/xray/${xrayCoreCPUVendor}.zip" -d /etc/multi-proxy/xray >/dev/null
+        rm -rf "/etc/multi-proxy/xray/${xrayCoreCPUVendor}.zip"
 
         version=$(curl -s https://api.github.com/repos/Loyalsoldier/v2ray-rules-dat/releases?per_page=1 | jq -r '.[]|.tag_name')
         echoContent skyBlue "------------------------Version-------------------------------"
         echo "version:${version}"
-        rm /etc/v2ray-agent/xray/geo* >/dev/null 2>&1
+        rm /etc/multi-proxy/xray/geo* >/dev/null 2>&1
 
-        wget -c -q "${wgetShowProgressStatus}" -P /etc/v2ray-agent/xray/ "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/download/${version}/geosite.dat"
-        wget -c -q "${wgetShowProgressStatus}" -P /etc/v2ray-agent/xray/ "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/download/${version}/geoip.dat"
+        wget -c -q "${wgetShowProgressStatus}" -P /etc/multi-proxy/xray/ "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/download/${version}/geosite.dat"
+        wget -c -q "${wgetShowProgressStatus}" -P /etc/multi-proxy/xray/ "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/download/${version}/geoip.dat"
 
-        chmod 655 /etc/v2ray-agent/xray/xray
+        chmod 655 /etc/multi-proxy/xray/xray
     else
-        echoContent green " ---> Xray-core版本:$(/etc/v2ray-agent/xray/xray --version | awk '{print $2}' | head -1)"
+        echoContent green " ---> Xray-core版本:$(/etc/multi-proxy/xray/xray --version | awk '{print $2}' | head -1)"
         read -r -p "是否更新、升级？[y/n]:" reInstallXrayStatus
         if [[ "${reInstallXrayStatus}" == "y" ]]; then
-            rm -f /etc/v2ray-agent/xray/xray
+            rm -f /etc/multi-proxy/xray/xray
             installXray "$1" "$2"
         fi
     fi
@@ -2050,7 +2056,7 @@ installXray() {
 # v2ray版本管理
 v2rayVersionManageMenu() {
     echoContent skyBlue "\n进度  $1/${totalProgress} : V2Ray版本管理"
-    if [[ ! -d "/etc/v2ray-agent/v2ray/" ]]; then
+    if [[ ! -d "/etc/multi-proxy/v2ray/" ]]; then
         echoContent red " ---> 没有检测到安装目录，请执行脚本安装内容"
         menu
         exit 0
@@ -2099,7 +2105,7 @@ v2rayVersionManageMenu() {
 # xray版本管理
 xrayVersionManageMenu() {
     echoContent skyBlue "\n进度  $1/${totalProgress} : Xray版本管理"
-    if [[ ! -d "/etc/v2ray-agent/xray/" ]]; then
+    if [[ ! -d "/etc/multi-proxy/xray/" ]]; then
         echoContent red " ---> 没有检测到安装目录，请执行脚本安装内容"
         menu
         exit 0
@@ -2179,17 +2185,17 @@ updateV2Ray() {
         fi
         echoContent green " ---> v2ray-core版本:${version}"
         #        if wget --help | grep -q show-progress; then
-        wget -c -q "${wgetShowProgressStatus}" -P /etc/v2ray-agent/v2ray/ "https://github.com/v2fly/v2ray-core/releases/download/${version}/${v2rayCoreCPUVendor}.zip"
+        wget -c -q "${wgetShowProgressStatus}" -P /etc/multi-proxy/v2ray/ "https://github.com/v2fly/v2ray-core/releases/download/${version}/${v2rayCoreCPUVendor}.zip"
         #        else
-        #            wget -c -P "/etc/v2ray-agent/v2ray/ https://github.com/v2fly/v2ray-core/releases/download/${version}/${v2rayCoreCPUVendor}.zip" >/dev/null 2>&1
+        #            wget -c -P "/etc/multi-proxy/v2ray/ https://github.com/v2fly/v2ray-core/releases/download/${version}/${v2rayCoreCPUVendor}.zip" >/dev/null 2>&1
         #        fi
 
-        unzip -o "/etc/v2ray-agent/v2ray/${v2rayCoreCPUVendor}.zip" -d /etc/v2ray-agent/v2ray >/dev/null
-        rm -rf "/etc/v2ray-agent/v2ray/${v2rayCoreCPUVendor}.zip"
+        unzip -o "/etc/multi-proxy/v2ray/${v2rayCoreCPUVendor}.zip" -d /etc/multi-proxy/v2ray >/dev/null
+        rm -rf "/etc/multi-proxy/v2ray/${v2rayCoreCPUVendor}.zip"
         handleV2Ray stop
         handleV2Ray start
     else
-        echoContent green " ---> 当前v2ray-core版本:$(/etc/v2ray-agent/v2ray/v2ray --version | awk '{print $2}' | head -1)"
+        echoContent green " ---> 当前v2ray-core版本:$(/etc/multi-proxy/v2ray/v2ray --version | awk '{print $2}' | head -1)"
 
         if [[ -n "$1" ]]; then
             version=$1
@@ -2204,24 +2210,24 @@ updateV2Ray() {
             read -r -p "回退版本为${version}，是否继续？[y/n]:" rollbackV2RayStatus
             if [[ "${rollbackV2RayStatus}" == "y" ]]; then
                 if [[ "${coreInstallType}" == "2" ]]; then
-                    echoContent green " ---> 当前v2ray-core版本:$(/etc/v2ray-agent/v2ray/v2ray --version | awk '{print $2}' | head -1)"
+                    echoContent green " ---> 当前v2ray-core版本:$(/etc/multi-proxy/v2ray/v2ray --version | awk '{print $2}' | head -1)"
                 elif [[ "${coreInstallType}" == "1" ]]; then
-                    echoContent green " ---> 当前Xray-core版本:$(/etc/v2ray-agent/xray/xray --version | awk '{print $2}' | head -1)"
+                    echoContent green " ---> 当前Xray-core版本:$(/etc/multi-proxy/xray/xray --version | awk '{print $2}' | head -1)"
                 fi
 
                 handleV2Ray stop
-                rm -f /etc/v2ray-agent/v2ray/v2ray
-                rm -f /etc/v2ray-agent/v2ray/v2ctl
+                rm -f /etc/multi-proxy/v2ray/v2ray
+                rm -f /etc/multi-proxy/v2ray/v2ctl
                 updateV2Ray "${version}"
             else
                 echoContent green " ---> 放弃回退版本"
             fi
-        elif [[ "${version}" == "v$(/etc/v2ray-agent/v2ray/v2ray --version | awk '{print $2}' | head -1)" ]]; then
+        elif [[ "${version}" == "v$(/etc/multi-proxy/v2ray/v2ray --version | awk '{print $2}' | head -1)" ]]; then
             read -r -p "当前版本与最新版相同，是否重新安装？[y/n]:" reInstallV2RayStatus
             if [[ "${reInstallV2RayStatus}" == "y" ]]; then
                 handleV2Ray stop
-                rm -f /etc/v2ray-agent/v2ray/v2ray
-                rm -f /etc/v2ray-agent/v2ray/v2ctl
+                rm -f /etc/multi-proxy/v2ray/v2ray
+                rm -f /etc/multi-proxy/v2ray/v2ctl
                 updateV2Ray
             else
                 echoContent green " ---> 放弃重新安装"
@@ -2229,8 +2235,8 @@ updateV2Ray() {
         else
             read -r -p "最新版本为:${version}，是否更新？[y/n]:" installV2RayStatus
             if [[ "${installV2RayStatus}" == "y" ]]; then
-                rm -f /etc/v2ray-agent/v2ray/v2ray
-                rm -f /etc/v2ray-agent/v2ray/v2ctl
+                rm -f /etc/multi-proxy/v2ray/v2ray
+                rm -f /etc/multi-proxy/v2ray/v2ctl
                 updateV2Ray
             else
                 echoContent green " ---> 放弃更新"
@@ -2252,15 +2258,15 @@ updateXray() {
 
         echoContent green " ---> Xray-core版本:${version}"
 
-        wget -c -q "${wgetShowProgressStatus}" -P /etc/v2ray-agent/xray/ "https://github.com/XTLS/Xray-core/releases/download/${version}/${xrayCoreCPUVendor}.zip"
+        wget -c -q "${wgetShowProgressStatus}" -P /etc/multi-proxy/xray/ "https://github.com/XTLS/Xray-core/releases/download/${version}/${xrayCoreCPUVendor}.zip"
 
-        unzip -o "/etc/v2ray-agent/xray/${xrayCoreCPUVendor}.zip" -d /etc/v2ray-agent/xray >/dev/null
-        rm -rf "/etc/v2ray-agent/xray/${xrayCoreCPUVendor}.zip"
-        chmod 655 /etc/v2ray-agent/xray/xray
+        unzip -o "/etc/multi-proxy/xray/${xrayCoreCPUVendor}.zip" -d /etc/multi-proxy/xray >/dev/null
+        rm -rf "/etc/multi-proxy/xray/${xrayCoreCPUVendor}.zip"
+        chmod 655 /etc/multi-proxy/xray/xray
         handleXray stop
         handleXray start
     else
-        echoContent green " ---> 当前Xray-core版本:$(/etc/v2ray-agent/xray/xray --version | awk '{print $2}' | head -1)"
+        echoContent green " ---> 当前Xray-core版本:$(/etc/multi-proxy/xray/xray --version | awk '{print $2}' | head -1)"
 
         if [[ -n "$1" ]]; then
             version=$1
@@ -2271,20 +2277,20 @@ updateXray() {
         if [[ -n "$1" ]]; then
             read -r -p "回退版本为${version}，是否继续？[y/n]:" rollbackXrayStatus
             if [[ "${rollbackXrayStatus}" == "y" ]]; then
-                echoContent green " ---> 当前Xray-core版本:$(/etc/v2ray-agent/xray/xray --version | awk '{print $2}' | head -1)"
+                echoContent green " ---> 当前Xray-core版本:$(/etc/multi-proxy/xray/xray --version | awk '{print $2}' | head -1)"
 
                 handleXray stop
-                rm -f /etc/v2ray-agent/xray/xray
+                rm -f /etc/multi-proxy/xray/xray
                 updateXray "${version}"
             else
                 echoContent green " ---> 放弃回退版本"
             fi
-        elif [[ "${version}" == "v$(/etc/v2ray-agent/xray/xray --version | awk '{print $2}' | head -1)" ]]; then
+        elif [[ "${version}" == "v$(/etc/multi-proxy/xray/xray --version | awk '{print $2}' | head -1)" ]]; then
             read -r -p "当前版本与最新版相同，是否重新安装？[y/n]:" reInstallXrayStatus
             if [[ "${reInstallXrayStatus}" == "y" ]]; then
                 handleXray stop
-                rm -f /etc/v2ray-agent/xray/xray
-                rm -f /etc/v2ray-agent/xray/xray
+                rm -f /etc/multi-proxy/xray/xray
+                rm -f /etc/multi-proxy/xray/xray
                 updateXray
             else
                 echoContent green " ---> 放弃重新安装"
@@ -2292,7 +2298,7 @@ updateXray() {
         else
             read -r -p "最新版本为:${version}，是否更新？[y/n]:" installXrayStatus
             if [[ "${installXrayStatus}" == "y" ]]; then
-                rm -f /etc/v2ray-agent/xray/xray
+                rm -f /etc/multi-proxy/xray/xray
                 updateXray
             else
                 echoContent green " ---> 放弃更新"
@@ -2323,7 +2329,7 @@ checkGFWStatue() {
 #    if [[ -n $(find /bin /usr/bin -name "systemctl") ]]; then
 #        rm -rf /etc/systemd/system/v2ray.service
 #        touch /etc/systemd/system/v2ray.service
-#        execStart='/etc/v2ray-agent/v2ray/v2ray -confdir /etc/v2ray-agent/v2ray/conf'
+#        execStart='/etc/multi-proxy/v2ray/v2ray -confdir /etc/multi-proxy/v2ray/conf'
 #        cat <<EOF >/etc/systemd/system/v2ray.service
 #[Unit]
 #Description=V2Ray - A unified platform for anti-censorship
@@ -2357,7 +2363,7 @@ installHysteriaService() {
     if [[ -n $(find /bin /usr/bin -name "systemctl") ]]; then
         rm -rf /etc/systemd/system/hysteria.service
         touch /etc/systemd/system/hysteria.service
-        execStart='/etc/v2ray-agent/hysteria/hysteria server -c /etc/v2ray-agent/hysteria/conf/config.json --log-level debug'
+        execStart='/etc/multi-proxy/hysteria/hysteria server -c /etc/multi-proxy/hysteria/conf/config.json --log-level debug'
         cat <<EOF >/etc/systemd/system/hysteria.service
 [Unit]
 After=network.target nss-lookup.target
@@ -2367,7 +2373,7 @@ User=root
 WorkingDirectory=/root
 CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
-ExecStart=/etc/v2ray-agent/hysteria/hysteria server -c /etc/v2ray-agent/hysteria/conf/config.json --log-level debug
+ExecStart=/etc/multi-proxy/hysteria/hysteria server -c /etc/multi-proxy/hysteria/conf/config.json --log-level debug
 Restart=on-failure
 RestartSec=10
 LimitNPROC=512
@@ -2388,7 +2394,7 @@ EOF
 #    if [[ -n $(find /bin /usr/bin -name "systemctl") ]]; then
 #        rm -rf /etc/systemd/system/tuic.service
 #        touch /etc/systemd/system/tuic.service
-#        execStart='/etc/v2ray-agent/tuic/tuic -c /etc/v2ray-agent/tuic/conf/config.json'
+#        execStart='/etc/multi-proxy/tuic/tuic -c /etc/multi-proxy/tuic/conf/config.json'
 #        cat <<EOF >/etc/systemd/system/tuic.service
 #[Unit]
 #Description=Tuic Service
@@ -2416,7 +2422,7 @@ installSingBoxService() {
     if [[ -n $(find /bin /usr/bin -name "systemctl") ]]; then
         rm -rf /etc/systemd/system/sing-box.service
         touch /etc/systemd/system/sing-box.service
-        execStart='/etc/v2ray-agent/sing-box/sing-box run -c /etc/v2ray-agent/sing-box/conf/config.json'
+        execStart='/etc/multi-proxy/sing-box/sing-box run -c /etc/multi-proxy/sing-box/conf/config.json'
         cat <<EOF >/etc/systemd/system/sing-box.service
 [Unit]
 After=network.target nss-lookup.target
@@ -2448,7 +2454,7 @@ installXrayService() {
     if [[ -n $(find /bin /usr/bin -name "systemctl") ]]; then
         rm -rf /etc/systemd/system/xray.service
         touch /etc/systemd/system/xray.service
-        execStart='/etc/v2ray-agent/xray/xray run -confdir /etc/v2ray-agent/xray/conf'
+        execStart='/etc/multi-proxy/xray/xray run -confdir /etc/multi-proxy/xray/conf'
         cat <<EOF >/etc/systemd/system/xray.service
 [Unit]
 Description=Xray Service
@@ -2487,7 +2493,7 @@ EOF
 #            echoContent green " ---> V2Ray启动成功"
 #        else
 #            echoContent red "V2Ray启动失败"
-#            echoContent red "请手动执行【/etc/v2ray-agent/v2ray/v2ray -confdir /etc/v2ray-agent/v2ray/conf】，查看错误日志"
+#            echoContent red "请手动执行【/etc/multi-proxy/v2ray/v2ray -confdir /etc/multi-proxy/v2ray/conf】，查看错误日志"
 #            exit 0
 #        fi
 #    elif [[ "$1" == "stop" ]]; then
@@ -2518,7 +2524,7 @@ handleHysteria() {
             echoContent green " ---> Hysteria启动成功"
         else
             echoContent red "Hysteria启动失败"
-            echoContent red "请手动执行【/etc/v2ray-agent/hysteria/hysteria --log-level debug -c /etc/v2ray-agent/hysteria/conf/config.json server】，查看错误日志"
+            echoContent red "请手动执行【/etc/multi-proxy/hysteria/hysteria --log-level debug -c /etc/multi-proxy/hysteria/conf/config.json server】，查看错误日志"
             exit 0
         fi
     elif [[ "$1" == "stop" ]]; then
@@ -2550,7 +2556,7 @@ handleTuic() {
             echoContent green " ---> Tuic启动成功"
         else
             echoContent red "Tuic启动失败"
-            echoContent red "请手动执行【/etc/v2ray-agent/tuic/tuic -c /etc/v2ray-agent/tuic/conf/config.json】，查看错误日志"
+            echoContent red "请手动执行【/etc/multi-proxy/tuic/tuic -c /etc/multi-proxy/tuic/conf/config.json】，查看错误日志"
             exit 0
         fi
     elif [[ "$1" == "stop" ]]; then
@@ -2582,7 +2588,7 @@ handleSingBox() {
             echoContent green " ---> sing-box启动成功"
         else
             echoContent red "sing-box启动失败"
-            echoContent red "请手动执行【/etc/v2ray-agent/sing-box/sing-box run -c /etc/v2ray-agent/sing-box/conf/config.json】，查看错误日志"
+            echoContent red "请手动执行【/etc/multi-proxy/sing-box/sing-box run -c /etc/multi-proxy/sing-box/conf/config.json】，查看错误日志"
             exit 0
         fi
     elif [[ "$1" == "stop" ]]; then
@@ -2613,7 +2619,7 @@ handleXray() {
             echoContent green " ---> Xray启动成功"
         else
             echoContent red "Xray启动失败"
-            echoContent red "请手动执行以下的命令后【/etc/v2ray-agent/xray/xray -confdir /etc/v2ray-agent/xray/conf】将错误日志进行反馈"
+            echoContent red "请手动执行以下的命令后【/etc/multi-proxy/xray/xray -confdir /etc/multi-proxy/xray/conf】将错误日志进行反馈"
             exit 0
         fi
     elif [[ "$1" == "stop" ]]; then
@@ -2943,12 +2949,12 @@ initHysteriaConfig() {
     local uuid=
     uuid=$(${ctlPath} uuid)
     #    getClients "${configPath}${frontingType}.json" true
-    cat <<EOF >/etc/v2ray-agent/hysteria/conf/config.json
+    cat <<EOF >/etc/multi-proxy/hysteria/conf/config.json
 {
     "listen":":${hysteriaPort}",
     "tls":{
-        "cert": "/etc/v2ray-agent/tls/${currentHost}.crt",
-        "key": "/etc/v2ray-agent/tls/${currentHost}.key"
+        "cert": "/etc/multi-proxy/tls/${currentHost}.crt",
+        "key": "/etc/multi-proxy/tls/${currentHost}.key"
     },
     "auth":{
         "type": "password",
@@ -2974,7 +2980,7 @@ initHysteriaConfig() {
 
 EOF
 
-    #    addClientsHysteria "/etc/v2ray-agent/hysteria/conf/config.json" true
+    #    addClientsHysteria "/etc/multi-proxy/hysteria/conf/config.json" true
 
     # 添加socks入站
     cat <<EOF >${configPath}/02_socks_inbounds_hysteria.json
@@ -3065,12 +3071,12 @@ initTuicProtocol() {
 #
 #    initTuicPort
 #    initTuicProtocol
-#    cat <<EOF >/etc/v2ray-agent/tuic/conf/config.json
+#    cat <<EOF >/etc/multi-proxy/tuic/conf/config.json
 #{
 #    "server": "[::]:${tuicPort}",
 #    "users": $(initXrayClients 9),
-#    "certificate": "/etc/v2ray-agent/tls/${currentHost}.crt",
-#    "private_key": "/etc/v2ray-agent/tls/${currentHost}.key",
+#    "certificate": "/etc/multi-proxy/tls/${currentHost}.crt",
+#    "private_key": "/etc/multi-proxy/tls/${currentHost}.key",
 #    "congestion_control":"${tuicAlgorithm}",
 #    "alpn": ["h3"],
 #    "log_level": "warn"
@@ -3084,7 +3090,7 @@ initSingBoxTuicConfig() {
 
     initTuicPort
     initTuicProtocol
-    cat <<EOF >/etc/v2ray-agent/sing-box/conf/config/tuic.json
+    cat <<EOF >/etc/multi-proxy/sing-box/conf/config/tuic.json
 {
      "inbounds": [
     {
@@ -3100,8 +3106,8 @@ initSingBoxTuicConfig() {
             "alpn": [
                 "h3"
             ],
-            "certificate_path": "/etc/v2ray-agent/tls/${currentHost}.crt",
-            "key_path": "/etc/v2ray-agent/tls/${currentHost}.key"
+            "certificate_path": "/etc/multi-proxy/tls/${currentHost}.crt",
+            "key_path": "/etc/multi-proxy/tls/${currentHost}.key"
         }
     }
 ]
@@ -3294,8 +3300,8 @@ configurationSingBoxOutbound() {
 # 初始化sing-box socks5 出站
 initSingBoxSocks5OutboundsConfig() {
     local uuid=
-    uuid=$(/etc/v2ray-agent/xray/xray uuid)
-    cat <<EOF >/etc/v2ray-agent/sing-box/conf/config/socks5_outbounds.json
+    uuid=$(/etc/multi-proxy/xray/xray uuid)
+    cat <<EOF >/etc/multi-proxy/sing-box/conf/config/socks5_outbounds.json
 {
      "outbounds": [
     {
@@ -3343,7 +3349,7 @@ initSingBoxHysteria2Config() {
     initHysteriaPort
     initHysteria2Network
 
-    cat <<EOF >/etc/v2ray-agent/sing-box/conf/config/hysteria2.json
+    cat <<EOF >/etc/multi-proxy/sing-box/conf/config/hysteria2.json
 {
     "inbounds": [
         {
@@ -3359,8 +3365,8 @@ initSingBoxHysteria2Config() {
                 "alpn": [
                     "h3"
                 ],
-                "certificate_path": "/etc/v2ray-agent/tls/${currentHost}.crt",
-                "key_path": "/etc/v2ray-agent/tls/${currentHost}.key"
+                "certificate_path": "/etc/multi-proxy/tls/${currentHost}.crt",
+                "key_path": "/etc/multi-proxy/tls/${currentHost}.key"
             }
         }
     ]
@@ -3399,8 +3405,8 @@ singBoxHysteria2Install() {
 
 # 合并config
 singBoxMergeConfig() {
-    rm /etc/v2ray-agent/sing-box/conf/config.json >/dev/null 2>&1
-    /etc/v2ray-agent/sing-box/sing-box merge config.json -C /etc/v2ray-agent/sing-box/conf/config/ -D /etc/v2ray-agent/sing-box/conf/ >/dev/null 2>&1
+    rm /etc/multi-proxy/sing-box/conf/config.json >/dev/null 2>&1
+    /etc/multi-proxy/sing-box/sing-box merge config.json -C /etc/multi-proxy/sing-box/conf/config/ -D /etc/multi-proxy/sing-box/conf/ >/dev/null 2>&1
 }
 
 # 初始化V2Ray 配置文件
@@ -3423,31 +3429,31 @@ initV2RayConfig() {
             uuid=${currentUUID}
             addClientsStatus=true
         else
-            uuid=$(/etc/v2ray-agent/v2ray/v2ctl uuid)
+            uuid=$(/etc/multi-proxy/v2ray/v2ctl uuid)
         fi
     elif [[ -z "${uuid}" ]]; then
-        uuid=$(/etc/v2ray-agent/v2ray/v2ctl uuid)
+        uuid=$(/etc/multi-proxy/v2ray/v2ctl uuid)
     fi
 
     if [[ -z "${uuid}" ]]; then
         addClientsStatus=
         echoContent red "\n ---> uuid读取错误，重新生成"
-        uuid=$(/etc/v2ray-agent/v2ray/v2ctl uuid)
+        uuid=$(/etc/multi-proxy/v2ray/v2ctl uuid)
     fi
 
     movePreviousConfig
     # log
-    cat <<EOF >/etc/v2ray-agent/v2ray/conf/00_log.json
+    cat <<EOF >/etc/multi-proxy/v2ray/conf/00_log.json
 {
   "log": {
-    "error": "/etc/v2ray-agent/v2ray/error.log",
+    "error": "/etc/multi-proxy/v2ray/error.log",
     "loglevel": "warning"
   }
 }
 EOF
     # outbounds
     if [[ -n "${pingIPv6}" ]]; then
-        cat <<EOF >/etc/v2ray-agent/v2ray/conf/10_ipv6_outbounds.json
+        cat <<EOF >/etc/multi-proxy/v2ray/conf/10_ipv6_outbounds.json
 {
     "outbounds": [
         {
@@ -3460,7 +3466,7 @@ EOF
 EOF
 
     else
-        cat <<EOF >/etc/v2ray-agent/v2ray/conf/10_ipv4_outbounds.json
+        cat <<EOF >/etc/multi-proxy/v2ray/conf/10_ipv4_outbounds.json
 {
     "outbounds":[
         {
@@ -3487,7 +3493,7 @@ EOF
     fi
 
     # dns
-    cat <<EOF >/etc/v2ray-agent/v2ray/conf/11_dns.json
+    cat <<EOF >/etc/multi-proxy/v2ray/conf/11_dns.json
 {
     "dns": {
         "servers": [
@@ -3507,7 +3513,7 @@ EOF
         fallbacksList='{"dest":31296,"xver":1},{"alpn":"h2","dest":31302,"xver":0}'
 
         getClients "${configPath}../tmp/04_trojan_TCP_inbounds.json" "${addClientsStatus}"
-        cat <<EOF >/etc/v2ray-agent/v2ray/conf/04_trojan_TCP_inbounds.json
+        cat <<EOF >/etc/multi-proxy/v2ray/conf/04_trojan_TCP_inbounds.json
 {
 "inbounds":[
 	{
@@ -3537,14 +3543,14 @@ EOF
 	]
 }
 EOF
-        addClients "/etc/v2ray-agent/v2ray/conf/04_trojan_TCP_inbounds.json" "${addClientsStatus}"
+        addClients "/etc/multi-proxy/v2ray/conf/04_trojan_TCP_inbounds.json" "${addClientsStatus}"
     fi
 
     # VLESS_WS_TLS
     if echo "${selectCustomInstallType}" | grep -q 1 || [[ "$1" == "all" ]]; then
         fallbacksList=${fallbacksList}',{"path":"/'${customPath}'ws","dest":31297,"xver":1}'
         getClients "${configPath}../tmp/03_VLESS_WS_inbounds.json" "${addClientsStatus}"
-        cat <<EOF >/etc/v2ray-agent/v2ray/conf/03_VLESS_WS_inbounds.json
+        cat <<EOF >/etc/multi-proxy/v2ray/conf/03_VLESS_WS_inbounds.json
 {
 "inbounds":[
     {
@@ -3573,7 +3579,7 @@ EOF
 ]
 }
 EOF
-        addClients "/etc/v2ray-agent/v2ray/conf/03_VLESS_WS_inbounds.json" "${addClientsStatus}"
+        addClients "/etc/multi-proxy/v2ray/conf/03_VLESS_WS_inbounds.json" "${addClientsStatus}"
     fi
 
     # trojan_grpc
@@ -3582,7 +3588,7 @@ EOF
             fallbacksList=${fallbacksList//31302/31304}
         fi
         getClients "${configPath}../tmp/04_trojan_gRPC_inbounds.json" "${addClientsStatus}"
-        cat <<EOF >/etc/v2ray-agent/v2ray/conf/04_trojan_gRPC_inbounds.json
+        cat <<EOF >/etc/multi-proxy/v2ray/conf/04_trojan_gRPC_inbounds.json
 {
     "inbounds": [
         {
@@ -3613,7 +3619,7 @@ EOF
     ]
 }
 EOF
-        addClients "/etc/v2ray-agent/v2ray/conf/04_trojan_gRPC_inbounds.json" "${addClientsStatus}"
+        addClients "/etc/multi-proxy/v2ray/conf/04_trojan_gRPC_inbounds.json" "${addClientsStatus}"
     fi
 
     # VMess_WS
@@ -3622,7 +3628,7 @@ EOF
 
         getClients "${configPath}../tmp/05_VMess_WS_inbounds.json" "${addClientsStatus}"
 
-        cat <<EOF >/etc/v2ray-agent/v2ray/conf/05_VMess_WS_inbounds.json
+        cat <<EOF >/etc/multi-proxy/v2ray/conf/05_VMess_WS_inbounds.json
 {
 "inbounds":[
 {
@@ -3652,12 +3658,12 @@ EOF
 ]
 }
 EOF
-        addClients "/etc/v2ray-agent/v2ray/conf/05_VMess_WS_inbounds.json" "${addClientsStatus}"
+        addClients "/etc/multi-proxy/v2ray/conf/05_VMess_WS_inbounds.json" "${addClientsStatus}"
     fi
 
     if echo "${selectCustomInstallType}" | grep -q 5 || [[ "$1" == "all" ]]; then
         getClients "${configPath}../tmp/06_VLESS_gRPC_inbounds.json" "${addClientsStatus}"
-        cat <<EOF >/etc/v2ray-agent/v2ray/conf/06_VLESS_gRPC_inbounds.json
+        cat <<EOF >/etc/multi-proxy/v2ray/conf/06_VLESS_gRPC_inbounds.json
 {
     "inbounds":[
     {
@@ -3685,7 +3691,7 @@ EOF
 ]
 }
 EOF
-        addClients "/etc/v2ray-agent/v2ray/conf/06_VLESS_gRPC_inbounds.json" "${addClientsStatus}"
+        addClients "/etc/multi-proxy/v2ray/conf/06_VLESS_gRPC_inbounds.json" "${addClientsStatus}"
     fi
 
     # VLESS_TCP
@@ -3695,7 +3701,7 @@ EOF
         defaultPort=${customPort}
     fi
 
-    cat <<EOF >/etc/v2ray-agent/v2ray/conf/02_VLESS_TCP_inbounds.json
+    cat <<EOF >/etc/multi-proxy/v2ray/conf/02_VLESS_TCP_inbounds.json
 {
 "inbounds":[
 {
@@ -3726,8 +3732,8 @@ EOF
       ],
       "certificates": [
         {
-          "certificateFile": "/etc/v2ray-agent/tls/${domain}.crt",
-          "keyFile": "/etc/v2ray-agent/tls/${domain}.key",
+          "certificateFile": "/etc/multi-proxy/tls/${domain}.crt",
+          "keyFile": "/etc/multi-proxy/tls/${domain}.key",
           "ocspStapling": 3600,
           "usage":"encipherment"
         }
@@ -3738,7 +3744,7 @@ EOF
 ]
 }
 EOF
-    addClients "/etc/v2ray-agent/v2ray/conf/02_VLESS_TCP_inbounds.json" "${addClientsStatus}"
+    addClients "/etc/multi-proxy/v2ray/conf/02_VLESS_TCP_inbounds.json" "${addClientsStatus}"
 
 }
 
@@ -3842,7 +3848,7 @@ initXrayConfig() {
         if [[ -n ${customUUID} ]]; then
             uuid=${customUUID}
         else
-            uuid=$(/etc/v2ray-agent/xray/xray uuid)
+            uuid=$(/etc/multi-proxy/xray/xray uuid)
         fi
 
         echoContent yellow "\n请输入自定义用户名[需合法]，[回车]随机随机用户名"
@@ -3855,7 +3861,7 @@ initXrayConfig() {
     if [[ -z "${addClientsStatus}" && -z "${uuid}" ]]; then
         addClientsStatus=
         echoContent red "\n ---> uuid读取错误，随机生成"
-        uuid=$(/etc/v2ray-agent/xray/xray uuid)
+        uuid=$(/etc/multi-proxy/xray/xray uuid)
     fi
 
     if [[ -n "${uuid}" ]]; then
@@ -3864,21 +3870,21 @@ initXrayConfig() {
     fi
 
     # log
-    if [[ ! -f "/etc/v2ray-agent/xray/conf/00_log.json" ]]; then
+    if [[ ! -f "/etc/multi-proxy/xray/conf/00_log.json" ]]; then
 
-        cat <<EOF >/etc/v2ray-agent/xray/conf/00_log.json
+        cat <<EOF >/etc/multi-proxy/xray/conf/00_log.json
 {
   "log": {
-    "error": "/etc/v2ray-agent/xray/error.log",
+    "error": "/etc/multi-proxy/xray/error.log",
     "loglevel": "warning"
   }
 }
 EOF
     fi
 
-    if [[ ! -f "/etc/v2ray-agent/xray/conf/12_policy.json" ]]; then
+    if [[ ! -f "/etc/multi-proxy/xray/conf/12_policy.json" ]]; then
 
-        cat <<EOF >/etc/v2ray-agent/xray/conf/12_policy.json
+        cat <<EOF >/etc/multi-proxy/xray/conf/12_policy.json
 {
   "policy": {
       "levels": {
@@ -3893,9 +3899,9 @@ EOF
     fi
 
     # outbounds
-    if [[ ! -f "/etc/v2ray-agent/xray/conf/10_ipv6_outbounds.json" ]]; then
+    if [[ ! -f "/etc/multi-proxy/xray/conf/10_ipv6_outbounds.json" ]]; then
         if [[ -n "${pingIPv6}" ]]; then
-            cat <<EOF >/etc/v2ray-agent/xray/conf/10_ipv6_outbounds.json
+            cat <<EOF >/etc/multi-proxy/xray/conf/10_ipv6_outbounds.json
 {
     "outbounds": [
         {
@@ -3908,7 +3914,7 @@ EOF
 EOF
 
         else
-            cat <<EOF >/etc/v2ray-agent/xray/conf/10_ipv4_outbounds.json
+            cat <<EOF >/etc/multi-proxy/xray/conf/10_ipv4_outbounds.json
 {
     "outbounds":[
         {
@@ -3941,8 +3947,8 @@ EOF
     fi
 
     # dns
-    if [[ ! -f "/etc/v2ray-agent/xray/conf/11_dns.json" ]]; then
-        cat <<EOF >/etc/v2ray-agent/xray/conf/11_dns.json
+    if [[ ! -f "/etc/multi-proxy/xray/conf/11_dns.json" ]]; then
+        cat <<EOF >/etc/multi-proxy/xray/conf/11_dns.json
 {
     "dns": {
         "servers": [
@@ -3953,8 +3959,8 @@ EOF
 EOF
     fi
     # routing
-    if [[ ! -f "/etc/v2ray-agent/xray/conf/09_routing.json" ]]; then
-        cat <<EOF >/etc/v2ray-agent/xray/conf/09_routing.json
+    if [[ ! -f "/etc/multi-proxy/xray/conf/09_routing.json" ]]; then
+        cat <<EOF >/etc/multi-proxy/xray/conf/09_routing.json
 {
   "routing": {
     "rules": [
@@ -3978,7 +3984,7 @@ EOF
     # trojan
     if echo "${selectCustomInstallType}" | grep -q 4 || [[ "$1" == "all" ]]; then
         fallbacksList='{"dest":31296,"xver":1},{"alpn":"h2","dest":31302,"xver":0}'
-        cat <<EOF >/etc/v2ray-agent/xray/conf/04_trojan_TCP_inbounds.json
+        cat <<EOF >/etc/multi-proxy/xray/conf/04_trojan_TCP_inbounds.json
 {
 "inbounds":[
 	{
@@ -4004,13 +4010,13 @@ EOF
 }
 EOF
     else
-        rm /etc/v2ray-agent/xray/conf/04_trojan_TCP_inbounds.json >/dev/null 2>&1
+        rm /etc/multi-proxy/xray/conf/04_trojan_TCP_inbounds.json >/dev/null 2>&1
     fi
 
     # VLESS_WS_TLS
     if echo "${selectCustomInstallType}" | grep -q 1 || [[ "$1" == "all" ]]; then
         fallbacksList=${fallbacksList}',{"path":"/'${customPath}'ws","dest":31297,"xver":1}'
-        cat <<EOF >/etc/v2ray-agent/xray/conf/03_VLESS_WS_inbounds.json
+        cat <<EOF >/etc/multi-proxy/xray/conf/03_VLESS_WS_inbounds.json
 {
 "inbounds":[
     {
@@ -4035,7 +4041,7 @@ EOF
 }
 EOF
     else
-        rm /etc/v2ray-agent/xray/conf/03_VLESS_WS_inbounds.json >/dev/null 2>&1
+        rm /etc/multi-proxy/xray/conf/03_VLESS_WS_inbounds.json >/dev/null 2>&1
     fi
 
     # trojan_grpc
@@ -4043,7 +4049,7 @@ EOF
         if ! echo "${selectCustomInstallType}" | grep -q 5 && [[ -n ${selectCustomInstallType} ]]; then
             fallbacksList=${fallbacksList//31302/31304}
         fi
-        cat <<EOF >/etc/v2ray-agent/xray/conf/04_trojan_gRPC_inbounds.json
+        cat <<EOF >/etc/multi-proxy/xray/conf/04_trojan_gRPC_inbounds.json
 {
     "inbounds": [
         {
@@ -4070,13 +4076,13 @@ EOF
 }
 EOF
     else
-        rm /etc/v2ray-agent/xray/conf/04_trojan_gRPC_inbounds.json >/dev/null 2>&1
+        rm /etc/multi-proxy/xray/conf/04_trojan_gRPC_inbounds.json >/dev/null 2>&1
     fi
 
     # VMess_WS
     if echo "${selectCustomInstallType}" | grep -q 3 || [[ "$1" == "all" ]]; then
         fallbacksList=${fallbacksList}',{"path":"/'${customPath}'vws","dest":31299,"xver":1}'
-        cat <<EOF >/etc/v2ray-agent/xray/conf/05_VMess_WS_inbounds.json
+        cat <<EOF >/etc/multi-proxy/xray/conf/05_VMess_WS_inbounds.json
 {
 "inbounds":[
 {
@@ -4100,11 +4106,11 @@ EOF
 }
 EOF
     else
-        rm /etc/v2ray-agent/xray/conf/05_VMess_WS_inbounds.json >/dev/null 2>&1
+        rm /etc/multi-proxy/xray/conf/05_VMess_WS_inbounds.json >/dev/null 2>&1
     fi
 
     if echo "${selectCustomInstallType}" | grep -q 5 || [[ "$1" == "all" ]]; then
-        cat <<EOF >/etc/v2ray-agent/xray/conf/06_VLESS_gRPC_inbounds.json
+        cat <<EOF >/etc/multi-proxy/xray/conf/06_VLESS_gRPC_inbounds.json
 {
     "inbounds":[
     {
@@ -4127,12 +4133,12 @@ EOF
 }
 EOF
     else
-        rm /etc/v2ray-agent/xray/conf/06_VLESS_gRPC_inbounds.json >/dev/null 2>&1
+        rm /etc/multi-proxy/xray/conf/06_VLESS_gRPC_inbounds.json >/dev/null 2>&1
     fi
     # VLESS Vision
     if echo "${selectCustomInstallType}" | grep -q 0 || [[ "$1" == "all" ]]; then
 
-        cat <<EOF >/etc/v2ray-agent/xray/conf/02_VLESS_TCP_inbounds.json
+        cat <<EOF >/etc/multi-proxy/xray/conf/02_VLESS_TCP_inbounds.json
 {
     "inbounds":[
         {
@@ -4155,8 +4161,8 @@ EOF
               "minVersion": "1.2",
               "certificates": [
                 {
-                  "certificateFile": "/etc/v2ray-agent/tls/${domain}.crt",
-                  "keyFile": "/etc/v2ray-agent/tls/${domain}.key",
+                  "certificateFile": "/etc/multi-proxy/tls/${domain}.crt",
+                  "keyFile": "/etc/multi-proxy/tls/${domain}.key",
                   "ocspStapling": 3600
                 }
               ]
@@ -4167,7 +4173,7 @@ EOF
 }
 EOF
     else
-        rm /etc/v2ray-agent/xray/conf/02_VLESS_TCP_inbounds.json >/dev/null 2>&1
+        rm /etc/multi-proxy/xray/conf/02_VLESS_TCP_inbounds.json >/dev/null 2>&1
     fi
 
     # VLESS_TCP/reality
@@ -4178,7 +4184,7 @@ EOF
         initRealityClientServersName
         initRealityKey
 
-        cat <<EOF >/etc/v2ray-agent/xray/conf/07_VLESS_vision_reality_inbounds.json
+        cat <<EOF >/etc/multi-proxy/xray/conf/07_VLESS_vision_reality_inbounds.json
 {
   "inbounds": [
     {
@@ -4219,7 +4225,7 @@ EOF
 }
 EOF
 
-        cat <<EOF >/etc/v2ray-agent/xray/conf/08_VLESS_reality_fallback_grpc_inbounds.json
+        cat <<EOF >/etc/multi-proxy/xray/conf/08_VLESS_reality_fallback_grpc_inbounds.json
 {
   "inbounds": [
     {
@@ -4247,8 +4253,8 @@ EOF
 EOF
 
     else
-        rm /etc/v2ray-agent/xray/conf/07_VLESS_vision_reality_inbounds.json >/dev/null 2>&1
-        rm /etc/v2ray-agent/xray/conf/08_VLESS_reality_fallback_grpc_inbounds.json >/dev/null 2>&1
+        rm /etc/multi-proxy/xray/conf/07_VLESS_vision_reality_inbounds.json >/dev/null 2>&1
+        rm /etc/multi-proxy/xray/conf/08_VLESS_reality_fallback_grpc_inbounds.json >/dev/null 2>&1
     fi
     installSniffing
 }
@@ -4259,7 +4265,7 @@ customCDNIP() {
     echoContent red "\n=============================================================="
     echoContent yellow "# 注意事项"
     echoContent yellow "\n教程地址:"
-    echoContent skyBlue "https://www.v2ray-agent.com/archives/cloudflarezi-xuan-ip"
+    echoContent skyBlue "https://www.multi-proxy.com/archives/cloudflarezi-xuan-ip"
     echoContent red "\n如对Cloudflare优化不了解，请不要使用"
     echoContent yellow "\n 1.CNAME www.digitalocean.com"
     echoContent yellow " 2.CNAME who.int"
@@ -4301,10 +4307,10 @@ defaultBase64Code() {
 
             echoContent yellow " ---> 格式化明文(VLESS+TCP+TLS_Vision)"
             echoContent green "协议类型:VLESS，地址:${currentHost}，端口:${currentDefaultPort}，用户ID:${id}，安全:tls，client-fingerprint: chrome，传输方式:tcp，flow:xtls-rprx-vision，账户名:${email}\n"
-            cat <<EOF >>"/etc/v2ray-agent/subscribe_local/default/${user}"
+            cat <<EOF >>"/etc/multi-proxy/subscribe_local/default/${user}"
 vless://${id}@${currentHost}:${currentDefaultPort}?encryption=none&security=tls&type=tcp&host=${currentHost}&fp=chrome&headerType=none&sni=${currentHost}&flow=xtls-rprx-vision#${email}
 EOF
-            cat <<EOF >>"/etc/v2ray-agent/subscribe_local/clashMeta/${user}"
+            cat <<EOF >>"/etc/multi-proxy/subscribe_local/clashMeta/${user}"
   - name: "${email}"
     type: vless
     server: ${currentHost}
@@ -4325,7 +4331,7 @@ EOF
             echoContent yellow " ---> 格式化明文(VLESS+TCP+TLS)"
             echoContent green "    协议类型:VLESS，地址:${currentHost}，端口:${currentDefaultPort}，用户ID:${id}，安全:tls，client-fingerprint: chrome,传输方式:tcp，账户名:${email}\n"
 
-            cat <<EOF >>"/etc/v2ray-agent/subscribe_local/default/${user}"
+            cat <<EOF >>"/etc/multi-proxy/subscribe_local/default/${user}"
 vless://${id}@${currentHost}:${currentDefaultPort}?security=tls&encryption=none&host=${currentHost}&fp=chrome&headerType=none&type=tcp#${email}
 EOF
             echoContent yellow " ---> 二维码 VLESS(VLESS+TCP+TLS)"
@@ -4338,7 +4344,7 @@ EOF
 
         echoContent yellow " ---> 格式化明文(Trojan+TCP+TLS_Vision)"
         echoContent green "协议类型:Trojan，地址:${currentHost}，端口:${currentDefaultPort}，用户ID:${id}，安全:xtls，传输方式:tcp，flow:xtls-rprx-vision，账户名:${email}\n"
-        cat <<EOF >>"/etc/v2ray-agent/subscribe_local/default/${user}"
+        cat <<EOF >>"/etc/multi-proxy/subscribe_local/default/${user}"
 trojan://${id}@${currentHost}:${currentDefaultPort}?encryption=none&security=xtls&type=tcp&host=${currentHost}&headerType=none&sni=${currentHost}&flow=xtls-rprx-vision#${email}
 EOF
         echoContent yellow " ---> 二维码 Trojan(Trojan+TCP+TLS_Vision)"
@@ -4354,10 +4360,10 @@ EOF
         echoContent green "    vmess://${qrCodeBase64Default}\n"
         echoContent yellow " ---> 二维码 vmess(VMess+WS+TLS)"
 
-        cat <<EOF >>"/etc/v2ray-agent/subscribe_local/default/${user}"
+        cat <<EOF >>"/etc/multi-proxy/subscribe_local/default/${user}"
 vmess://${qrCodeBase64Default}
 EOF
-        cat <<EOF >>"/etc/v2ray-agent/subscribe_local/clashMeta/${user}"
+        cat <<EOF >>"/etc/multi-proxy/subscribe_local/clashMeta/${user}"
   - name: "${email}"
     type: vmess
     server: ${add}
@@ -4385,10 +4391,10 @@ EOF
         echoContent yellow " ---> 格式化明文(VLESS+WS+TLS)"
         echoContent green "    协议类型:VLESS，地址:${add}，伪装域名/SNI:${currentHost}，端口:${currentDefaultPort}，client-fingerprint: chrome,用户ID:${id}，安全:tls，传输方式:ws，路径:/${currentPath}ws，账户名:${email}\n"
 
-        cat <<EOF >>"/etc/v2ray-agent/subscribe_local/default/${user}"
+        cat <<EOF >>"/etc/multi-proxy/subscribe_local/default/${user}"
 vless://${id}@${add}:${currentDefaultPort}?encryption=none&security=tls&type=ws&host=${currentHost}&sni=${currentHost}&fp=chrome&path=/${currentPath}ws#${email}
 EOF
-        cat <<EOF >>"/etc/v2ray-agent/subscribe_local/clashMeta/${user}"
+        cat <<EOF >>"/etc/multi-proxy/subscribe_local/clashMeta/${user}"
   - name: "${email}"
     type: vless
     server: ${add}
@@ -4416,10 +4422,10 @@ EOF
         echoContent yellow " ---> 格式化明文(VLESS+gRPC+TLS)"
         echoContent green "    协议类型:VLESS，地址:${add}，伪装域名/SNI:${currentHost}，端口:${currentDefaultPort}，用户ID:${id}，安全:tls，传输方式:gRPC，alpn:h2，client-fingerprint: chrome,serviceName:${currentPath}grpc，账户名:${email}\n"
 
-        cat <<EOF >>"/etc/v2ray-agent/subscribe_local/default/${user}"
+        cat <<EOF >>"/etc/multi-proxy/subscribe_local/default/${user}"
 vless://${id}@${add}:${currentDefaultPort}?encryption=none&security=tls&type=grpc&host=${currentHost}&path=${currentPath}grpc&serviceName=${currentPath}grpc&fp=chrome&alpn=h2&sni=${currentHost}#${email}
 EOF
-        cat <<EOF >>"/etc/v2ray-agent/subscribe_local/clashMeta/${user}"
+        cat <<EOF >>"/etc/multi-proxy/subscribe_local/clashMeta/${user}"
   - name: "${email}"
     type: vless
     server: ${add}
@@ -4441,11 +4447,11 @@ EOF
         echoContent yellow " ---> Trojan(TLS)"
         echoContent green "    trojan://${id}@${currentHost}:${currentDefaultPort}?peer=${currentHost}&fp=chrome&sni=${currentHost}&alpn=http/1.1#${currentHost}_Trojan\n"
 
-        cat <<EOF >>"/etc/v2ray-agent/subscribe_local/default/${user}"
+        cat <<EOF >>"/etc/multi-proxy/subscribe_local/default/${user}"
 trojan://${id}@${currentHost}:${currentDefaultPort}?peer=${currentHost}&fp=chrome&sni=${currentHost}&alpn=http/1.1#${email}_Trojan
 EOF
 
-        cat <<EOF >>"/etc/v2ray-agent/subscribe_local/clashMeta/${user}"
+        cat <<EOF >>"/etc/multi-proxy/subscribe_local/clashMeta/${user}"
   - name: "${email}"
     type: trojan
     server: ${currentHost}
@@ -4463,10 +4469,10 @@ EOF
 
         echoContent yellow " ---> Trojan gRPC(TLS)"
         echoContent green "    trojan://${id}@${add}:${currentDefaultPort}?encryption=none&peer=${currentHost}&fp=chrome&security=tls&type=grpc&sni=${currentHost}&alpn=h2&path=${currentPath}trojangrpc&serviceName=${currentPath}trojangrpc#${email}\n"
-        cat <<EOF >>"/etc/v2ray-agent/subscribe_local/default/${user}"
+        cat <<EOF >>"/etc/multi-proxy/subscribe_local/default/${user}"
 trojan://${id}@${add}:${currentDefaultPort}?encryption=none&peer=${currentHost}&security=tls&type=grpc&fp=chrome&sni=${currentHost}&alpn=h2&path=${currentPath}trojangrpc&serviceName=${currentPath}trojangrpc#${email}
 EOF
-        cat <<EOF >>"/etc/v2ray-agent/subscribe_local/clashMeta/${user}"
+        cat <<EOF >>"/etc/multi-proxy/subscribe_local/clashMeta/${user}"
   - name: "${email}"
     server: ${add}
     port: ${currentDefaultPort}
@@ -4485,13 +4491,13 @@ EOF
         echoContent yellow " ---> Hysteria(TLS)"
 
         echoContent green "    hysteria2://${id}@${currentHost}:${hysteriaPort}?peer=${currentHost}&insecure=0&sni=${currentHost}&alpn=h3#${email}\n"
-        cat <<EOF >>"/etc/v2ray-agent/subscribe_local/default/${user}"
+        cat <<EOF >>"/etc/multi-proxy/subscribe_local/default/${user}"
 hysteria2://${id}@${currentHost}:${hysteriaPort}?peer=${currentHost}&insecure=0&sni=${currentHost}&alpn=h3#${email}
 EOF
         echoContent yellow " ---> v2rayN(hysteria+TLS)"
         echo "{\"server\": \"$(getPublicIP 4):${hysteriaPort}\",\"socks5\": { \"listen\": \"127.0.0.1:7798\", \"timeout\": 300},\"auth\":\"${id}\",\"tls\":{\"sni\":\"${currentHost}\"}}" | jq
 
-        cat <<EOF >>"/etc/v2ray-agent/subscribe_local/clashMeta/${user}"
+        cat <<EOF >>"/etc/multi-proxy/subscribe_local/clashMeta/${user}"
   - name: "${email}"
     type: hysteria2
     server: ${currentHost}
@@ -4512,10 +4518,10 @@ EOF
 
         echoContent yellow " ---> 格式化明文(VLESS+reality+uTLS+Vision)"
         echoContent green "协议类型:VLESS reality，地址:$(getPublicIP)，publicKey:${currentRealityPublicKey}，shortId: 6ba85179e30d4fc2,serverNames：${currentRealityServerNames}，端口:${currentRealityPort}，用户ID:${id}，传输方式:tcp，账户名:${email}\n"
-        cat <<EOF >>"/etc/v2ray-agent/subscribe_local/default/${user}"
+        cat <<EOF >>"/etc/multi-proxy/subscribe_local/default/${user}"
 vless://${id}@$(getPublicIP):${currentRealityPort}?encryption=none&security=reality&type=tcp&sni=${currentRealityServerNames}&fp=chrome&pbk=${currentRealityPublicKey}&sid=6ba85179e30d4fc2&flow=xtls-rprx-vision#${email}
 EOF
-        cat <<EOF >>"/etc/v2ray-agent/subscribe_local/clashMeta/${user}"
+        cat <<EOF >>"/etc/multi-proxy/subscribe_local/clashMeta/${user}"
   - name: "${email}"
     type: vless
     server: $(getPublicIP)
@@ -4540,10 +4546,10 @@ EOF
 
         echoContent yellow " ---> 格式化明文(VLESS+reality+uTLS+gRPC)"
         echoContent green "协议类型:VLESS reality，serviceName:grpc，地址:$(getPublicIP)，publicKey:${currentRealityPublicKey}，shortId: 6ba85179e30d4fc2，serverNames：${currentRealityServerNames}，端口:${currentRealityPort}，用户ID:${id}，传输方式:gRPC，client-fingerprint：chrome，账户名:${email}\n"
-        cat <<EOF >>"/etc/v2ray-agent/subscribe_local/default/${user}"
+        cat <<EOF >>"/etc/multi-proxy/subscribe_local/default/${user}"
 vless://${id}@$(getPublicIP):${currentRealityPort}?encryption=none&security=reality&type=grpc&sni=${currentRealityServerNames}&fp=chrome&pbk=${currentRealityPublicKey}&sid=6ba85179e30d4fc2&path=grpc&serviceName=grpc#${email}
 EOF
-        cat <<EOF >>"/etc/v2ray-agent/subscribe_local/clashMeta/${user}"
+        cat <<EOF >>"/etc/multi-proxy/subscribe_local/clashMeta/${user}"
   - name: "${email}"
     type: vless
     server: $(getPublicIP)
@@ -4577,13 +4583,13 @@ EOF
         echoContent yellow " ---> 格式化明文(Tuic+TLS)"
         echoContent green "    协议类型:Tuic，地址:${currentHost}，端口：${tuicPort}，uuid：${tuicUUID}，password：${tuicPassword}，congestion-controller:${tuicAlgorithm}，alpn: h3，账户名:${email}\n"
 
-        cat <<EOF >>"/etc/v2ray-agent/subscribe_local/default/${user}"
+        cat <<EOF >>"/etc/multi-proxy/subscribe_local/default/${user}"
 tuic://${tuicUUID}:${tuicPassword}@${currentHost}:${tuicPort}?congestion_control=${tuicAlgorithm}&alpn=h3&sni=${currentHost}&udp_relay_mode=quic&allow_insecure=0#${email}
 EOF
         echoContent yellow " ---> v2rayN(Tuic+TLS)"
         echo "{\"relay\": {\"server\": \"${currentHost}:${tuicPort}\",\"uuid\": \"${tuicUUID}\",\"password\": \"${tuicPassword}\",\"ip\": \"$(getPublicIP 4)\",\"congestion_control\": \"${tuicAlgorithm}\",\"alpn\": [\"h3\"]},\"local\": {\"server\": \"127.0.0.1:7798\"},\"log_level\": \"warn\"}" | jq
 
-        cat <<EOF >>"/etc/v2ray-agent/subscribe_local/clashMeta/${user}"
+        cat <<EOF >>"/etc/multi-proxy/subscribe_local/clashMeta/${user}"
   - name: "${email}"
     server: ${currentHost}
     type: tuic
@@ -4821,14 +4827,14 @@ checkNginx302() {
 # 备份恢复nginx文件
 backupNginxConfig() {
     if [[ "$1" == "backup" ]]; then
-        cp ${nginxConfigPath}alone.conf /etc/v2ray-agent/alone_backup.conf
+        cp ${nginxConfigPath}alone.conf /etc/multi-proxy/alone_backup.conf
         echoContent green " ---> nginx配置文件备份成功"
     fi
 
-    if [[ "$1" == "restoreBackup" ]] && [[ -f "/etc/v2ray-agent/alone_backup.conf" ]]; then
-        cp /etc/v2ray-agent/alone_backup.conf ${nginxConfigPath}alone.conf
+    if [[ "$1" == "restoreBackup" ]] && [[ -f "/etc/multi-proxy/alone_backup.conf" ]]; then
+        cp /etc/multi-proxy/alone_backup.conf ${nginxConfigPath}alone.conf
         echoContent green " ---> nginx配置文件恢复备份成功"
-        rm /etc/v2ray-agent/alone_backup.conf
+        rm /etc/multi-proxy/alone_backup.conf
     fi
 
 }
@@ -4907,7 +4913,7 @@ updateNginxBlog() {
     if [[ "${selectInstallNginxBlogType}" =~ ^[1-9]$ ]]; then
         rm -rf "${nginxStaticPath}"
 
-        wget -q -P "${nginxStaticPath}" "https://raw.githubusercontent.com/mack-a/v2ray-agent/master/fodder/blog/unable/html${selectInstallNginxBlogType}.zip" >/dev/null
+        wget -q -P "${nginxStaticPath}" "https://raw.githubusercontent.com/mack-a/multi-proxy/master/fodder/blog/unable/html${selectInstallNginxBlogType}.zip" >/dev/null
 
         unzip -o "${nginxStaticPath}html${selectInstallNginxBlogType}.zip" -d "${nginxStaticPath}" >/dev/null
         rm -f "${nginxStaticPath}html${selectInstallNginxBlogType}.zip*"
@@ -5082,15 +5088,15 @@ unInstall() {
     #    fi
     #    rm -rf /root/.acme.sh
 
-    #    rm -rf /tmp/v2ray-agent-tls/*
-    #    if [[ -d "/etc/v2ray-agent/tls" ]] && [[ -n $(find /etc/v2ray-agent/tls/ -name "*.key") ]] && [[ -n $(find /etc/v2ray-agent/tls/ -name "*.crt") ]]; then
-    #        mv /etc/v2ray-agent/tls /tmp/v2ray-agent-tls
-    #        if [[ -n $(find /tmp/v2ray-agent-tls -name '*.key') ]]; then
-    #            echoContent yellow " ---> 备份证书成功，请注意留存。[/tmp/v2ray-agent-tls]"
+    #    rm -rf /tmp/multi-proxy-tls/*
+    #    if [[ -d "/etc/multi-proxy/tls" ]] && [[ -n $(find /etc/multi-proxy/tls/ -name "*.key") ]] && [[ -n $(find /etc/multi-proxy/tls/ -name "*.crt") ]]; then
+    #        mv /etc/multi-proxy/tls /tmp/multi-proxy-tls
+    #        if [[ -n $(find /tmp/multi-proxy-tls -name '*.key') ]]; then
+    #            echoContent yellow " ---> 备份证书成功，请注意留存。[/tmp/multi-proxy-tls]"
     #        fi
     #    fi
 
-    rm -rf /etc/v2ray-agent
+    rm -rf /etc/multi-proxy
     rm -rf ${nginxConfigPath}alone.conf
     rm -rf ${nginxConfigPath}checkPortOpen.conf >/dev/null 2>&1
 
@@ -5099,8 +5105,8 @@ unInstall() {
         echoContent green " ---> 删除伪装网站完成"
     fi
 
-    rm -rf /usr/bin/vasma
-    rm -rf /usr/sbin/vasma
+    rm -rf /usr/bin/mp
+    rm -rf /usr/sbin/mp
     echoContent green " ---> 卸载快捷方式完成"
     echoContent green " ---> 卸载v2ray-agent脚本完成"
 }
@@ -5177,12 +5183,12 @@ customUUID() {
     else
         jq -r -c '.inbounds[0].settings.clients[].id' ${configPath}${frontingType}.json | while read -r line; do
             if [[ "${line}" == "${currentCustomUUID}" ]]; then
-                echo >/tmp/v2ray-agent
+                echo >/tmp/multi-proxy
             fi
         done
-        if [[ -f "/tmp/v2ray-agent" && -n $(cat /tmp/v2ray-agent) ]]; then
+        if [[ -f "/tmp/multi-proxy" && -n $(cat /tmp/multi-proxy) ]]; then
             echoContent red " ---> UUID不可重复"
-            rm /tmp/v2ray-agent
+            rm /tmp/multi-proxy
             exit 0
         fi
     fi
@@ -5204,12 +5210,12 @@ customUserEmail() {
 
         jq -r -c '.inbounds[0].settings.clients[].email' ${configPath}${defaultConfig}.json | while read -r line; do
             if [[ "${line}" == "${currentCustomEmail}" ]]; then
-                echo >/tmp/v2ray-agent
+                echo >/tmp/multi-proxy
             fi
         done
-        if [[ -f "/tmp/v2ray-agent" && -n $(cat /tmp/v2ray-agent) ]]; then
+        if [[ -f "/tmp/multi-proxy" && -n $(cat /tmp/multi-proxy) ]]; then
             echoContent red " ---> email不可重复"
-            rm /tmp/v2ray-agent
+            rm /tmp/multi-proxy
             exit 0
         fi
     fi
@@ -5327,6 +5333,7 @@ addUserXray() {
     echoContent green " ---> 添加完成"
     manageAccount 1
 }
+
 # 添加用户
 addUser() {
 
@@ -5541,22 +5548,22 @@ removeUser() {
 # 更新脚本
 updateV2RayAgent() {
     echoContent skyBlue "\n进度  $1/${totalProgress} : 更新v2ray-agent脚本"
-    rm -rf /etc/v2ray-agent/install.sh
+    rm -rf /etc/multi-proxy/install.sh
     #    if wget --help | grep -q show-progress; then
-    wget -c -q "${wgetShowProgressStatus}" -P /etc/v2ray-agent/ -N --no-check-certificate "https://raw.githubusercontent.com/mack-a/v2ray-agent/master/install.sh"
+    wget -c -q "${wgetShowProgressStatus}" -P /etc/multi-proxy/ -N --no-check-certificate "https://raw.githubusercontent.com/mack-a/multi-proxy/master/install.sh"
     #    else
-    #        wget -c -q -P /etc/v2ray-agent/ -N --no-check-certificate "https://raw.githubusercontent.com/mack-a/v2ray-agent/master/install.sh"
+    #        wget -c -q -P /etc/multi-proxy/ -N --no-check-certificate "https://raw.githubusercontent.com/mack-a/multi-proxy/master/install.sh"
     #    fi
 
-    sudo chmod 700 /etc/v2ray-agent/install.sh
+    sudo chmod 700 /etc/multi-proxy/install.sh
     local version
-    version=$(grep '当前版本：v' "/etc/v2ray-agent/install.sh" | awk -F "[v]" '{print $2}' | tail -n +2 | head -n 1 | awk -F "[\"]" '{print $1}')
+    version=$(grep '当前版本：v' "/etc/multi-proxy/install.sh" | awk -F "[v]" '{print $2}' | tail -n +2 | head -n 1 | awk -F "[\"]" '{print $1}')
 
     echoContent green "\n ---> 更新完毕"
-    echoContent yellow " ---> 请手动执行[vasma]打开脚本"
+    echoContent yellow " ---> 请手动执行[mp]打开脚本"
     echoContent green " ---> 当前版本：${version}\n"
     echoContent yellow "如更新不成功，请手动执行下面命令\n"
-    echoContent skyBlue "wget -P /root -N --no-check-certificate https://raw.githubusercontent.com/mack-a/v2ray-agent/master/install.sh && chmod 700 /root/install.sh && /root/install.sh"
+    echoContent skyBlue "wget -P /root -N --no-check-certificate https://raw.githubusercontent.com/mack-a/multi-proxy/master/install.sh && chmod 700 /root/install.sh && /root/install.sh"
     echo
     exit 0
 }
@@ -5664,13 +5671,13 @@ EOF
         tail -f ${configPathLog}error.log
         ;;
     4)
-        if [[ ! -f "/etc/v2ray-agent/crontab_tls.log" ]]; then
-            touch /etc/v2ray-agent/crontab_tls.log
+        if [[ ! -f "/etc/multi-proxy/crontab_tls.log" ]]; then
+            touch /etc/multi-proxy/crontab_tls.log
         fi
-        tail -n 100 /etc/v2ray-agent/crontab_tls.log
+        tail -n 100 /etc/multi-proxy/crontab_tls.log
         ;;
     5)
-        tail -n 100 /etc/v2ray-agent/tls/acme.log
+        tail -n 100 /etc/multi-proxy/tls/acme.log
         ;;
     6)
         echo >${configPathLog}access.log
@@ -5681,28 +5688,27 @@ EOF
 
 # 脚本快捷方式
 aliasInstall() {
-
-    if [[ -f "$HOME/install.sh" ]] && [[ -d "/etc/v2ray-agent" ]] && grep <"$HOME/install.sh" -q "作者:mack-a"; then
-        mv "$HOME/install.sh" /etc/v2ray-agent/install.sh
+    if [[ -f "$HOME/install.sh" ]] && [[ -d "/etc/multi-proxy" ]] && grep <"$HOME/install.sh" -q "作者:mack-a"; then
+        mv "$HOME/install.sh" /etc/multi-proxy/install.sh
         local vasmaType=
         if [[ -d "/usr/bin/" ]]; then
-            if [[ ! -f "/usr/bin/vasma" ]]; then
-                ln -s /etc/v2ray-agent/install.sh /usr/bin/vasma
-                chmod 700 /usr/bin/vasma
+            if [[ ! -f "/usr/bin/mp" ]]; then
+                ln -s /etc/multi-proxy/install.sh /usr/bin/mp
+                chmod 700 /usr/bin/mp
                 vasmaType=true
             fi
 
             rm -rf "$HOME/install.sh"
         elif [[ -d "/usr/sbin" ]]; then
-            if [[ ! -f "/usr/sbin/vasma" ]]; then
-                ln -s /etc/v2ray-agent/install.sh /usr/sbin/vasma
-                chmod 700 /usr/sbin/vasma
+            if [[ ! -f "/usr/sbin/mp" ]]; then
+                ln -s /etc/multi-proxy/install.sh /usr/sbin/mp
+                chmod 700 /usr/sbin/mp
                 vasmaType=true
             fi
             rm -rf "$HOME/install.sh"
         fi
         if [[ "${vasmaType}" == "true" ]]; then
-            echoContent green "快捷方式创建成功，可执行[vasma]重新打开脚本"
+            echoContent green "快捷方式创建成功，可执行[mp]重新打开脚本"
         fi
     fi
 }
@@ -5742,7 +5748,7 @@ ipv6Routing() {
         echoContent red "=============================================================="
         echoContent yellow "# 注意事项\n"
         echoContent yellow "# 注意事项"
-        echoContent yellow "# 使用教程：https://www.v2ray-agent.com/archives/ba-he-yi-jiao-ben-yu-ming-fen-liu-jiao-cheng \n"
+        echoContent yellow "# 使用教程：https://www.multi-proxy.com/archives/ba-he-yi-jiao-ben-yu-ming-fen-liu-jiao-cheng \n"
 
         read -r -p "请按照上面示例录入域名:" domainList
         addInstallRouting IPv6_out outboundTag "${domainList}"
@@ -6122,7 +6128,7 @@ warpRouting() {
         exit 0
     elif [[ "${warpStatus}" == "2" ]]; then
         echoContent yellow "# 注意事项"
-        echoContent yellow "# 使用教程：https://www.v2ray-agent.com/archives/ba-he-yi-jiao-ben-yu-ming-fen-liu-jiao-cheng \n"
+        echoContent yellow "# 使用教程：https://www.multi-proxy.com/archives/ba-he-yi-jiao-ben-yu-ming-fen-liu-jiao-cheng \n"
 
         read -r -p "请按照上面示例录入域名:" domainList
 
@@ -6195,22 +6201,22 @@ EOF
 
 # 读取第三方warp配置
 readConfigWarpReg() {
-    if [[ ! -f "/etc/v2ray-agent/warp/config" ]]; then
-        /etc/v2ray-agent/warp/warp-reg >/etc/v2ray-agent/warp/config
+    if [[ ! -f "/etc/multi-proxy/warp/config" ]]; then
+        /etc/multi-proxy/warp/warp-reg >/etc/multi-proxy/warp/config
     fi
 
-    secretKeyWarpReg=$(grep <"/etc/v2ray-agent/warp/config" private_key | awk '{print $2}')
+    secretKeyWarpReg=$(grep <"/etc/multi-proxy/warp/config" private_key | awk '{print $2}')
 
-    addressWarpReg=$(grep <"/etc/v2ray-agent/warp/config" v6 | awk '{print $2}')
+    addressWarpReg=$(grep <"/etc/multi-proxy/warp/config" v6 | awk '{print $2}')
 
-    publicKeyWarpReg=$(grep <"/etc/v2ray-agent/warp/config" public_key | awk '{print $2}')
+    publicKeyWarpReg=$(grep <"/etc/multi-proxy/warp/config" public_key | awk '{print $2}')
 
-    reservedWarpReg=$(grep <"/etc/v2ray-agent/warp/config" reserved | awk -F "[:]" '{print $2}')
+    reservedWarpReg=$(grep <"/etc/multi-proxy/warp/config" reserved | awk -F "[:]" '{print $2}')
 
 }
 # 安装warp-reg工具
 installWarpReg() {
-    if [[ ! -f "/etc/v2ray-agent/warp/warp-reg" ]]; then
+    if [[ ! -f "/etc/multi-proxy/warp/warp-reg" ]]; then
         echo
         echoContent yellow "# 注意事项"
         echoContent yellow "# 依赖第三方程序，请熟知其中风险"
@@ -6220,8 +6226,8 @@ installWarpReg() {
 
         if [[ "${installWarpRegStatus}" == "y" ]]; then
 
-            curl -sLo /etc/v2ray-agent/warp/warp-reg "https://github.com/badafans/warp-reg/releases/download/v1.0/${warpRegCoreCPUVendor}"
-            chmod 655 /etc/v2ray-agent/warp/warp-reg
+            curl -sLo /etc/multi-proxy/warp/warp-reg "https://github.com/badafans/warp-reg/releases/download/v1.0/${warpRegCoreCPUVendor}"
+            chmod 655 /etc/multi-proxy/warp/warp-reg
 
         else
             echoContent yellow " ---> 放弃安装"
@@ -6279,11 +6285,11 @@ unInstallWireGuard() {
 
         if [[ "${type}" == "IPv4" ]]; then
             if ! grep -q "wireguard_out_IPv6" <${configPath}10_ipv4_outbounds.json; then
-                rm -rf /etc/v2ray-agent/warp/config >/dev/null 2>&1
+                rm -rf /etc/multi-proxy/warp/config >/dev/null 2>&1
             fi
         elif [[ "${type}" == "IPv6" ]]; then
             if ! grep -q "wireguard_out_IPv4" <${configPath}10_ipv4_outbounds.json; then
-                rm -rf /etc/v2ray-agent/warp/config >/dev/null 2>&1
+                rm -rf /etc/multi-proxy/warp/config >/dev/null 2>&1
             fi
         fi
     fi
@@ -6291,7 +6297,7 @@ unInstallWireGuard() {
     if [[ -n "${singBoxConfigPath}" ]]; then
         if [[ ! -f "${singBoxConfigPath}config/wireguard_out_IPv6_route.json" && ! -f "${singBoxConfigPath}config/wireguard_out_IPv4_route.json" ]]; then
             rm ${singBoxConfigPath}config/wireguard_outbound.json >/dev/null 2>&1
-            rm -rf /etc/v2ray-agent/warp/config >/dev/null 2>&1
+            rm -rf /etc/multi-proxy/warp/config >/dev/null 2>&1
         fi
     fi
 }
@@ -6373,7 +6379,7 @@ warpRoutingReg() {
     elif [[ "${warpStatus}" == "2" ]]; then
         echoContent yellow "# 注意事项"
         echoContent yellow "# 支持sing-box、Xray-core"
-        echoContent yellow "# 使用教程：https://www.v2ray-agent.com/archives/ba-he-yi-jiao-ben-yu-ming-fen-liu-jiao-cheng \n"
+        echoContent yellow "# 使用教程：https://www.multi-proxy.com/archives/ba-he-yi-jiao-ben-yu-ming-fen-liu-jiao-cheng \n"
 
         read -r -p "请按照上面示例录入域名:" domainList
         addWireGuardRoute "${type}" outboundTag "${domainList}"
@@ -6524,7 +6530,7 @@ dokodemoDoorRouting() {
     echoContent skyBlue "\n功能 1/${totalProgress} : 任意门分流"
     echoContent red "\n=============================================================="
     echoContent yellow "# 注意事项"
-    echoContent yellow "# 使用教程：https://www.v2ray-agent.com/archives/ba-he-yi-jiao-ben-yu-ming-fen-liu-jiao-cheng \n"
+    echoContent yellow "# 使用教程：https://www.multi-proxy.com/archives/ba-he-yi-jiao-ben-yu-ming-fen-liu-jiao-cheng \n"
 
     echoContent yellow "1.添加出站"
     echoContent yellow "2.添加入站"
@@ -6549,7 +6555,7 @@ vmessWSRouting() {
     echoContent skyBlue "\n功能 1/${totalProgress} : VMess+WS+TLS 分流"
     echoContent red "\n=============================================================="
     echoContent yellow "# 注意事项"
-    echoContent yellow "# 使用教程：https://www.v2ray-agent.com/archives/ba-he-yi-jiao-ben-yu-ming-fen-liu-jiao-cheng \n"
+    echoContent yellow "# 使用教程：https://www.multi-proxy.com/archives/ba-he-yi-jiao-ben-yu-ming-fen-liu-jiao-cheng \n"
 
     echoContent yellow "1.添加出站"
     echoContent yellow "2.卸载"
@@ -6830,7 +6836,7 @@ dnsRouting() {
     echoContent skyBlue "\n功能 1/${totalProgress} : DNS分流"
     echoContent red "\n=============================================================="
     echoContent yellow "# 注意事项"
-    echoContent yellow "# 使用教程：https://www.v2ray-agent.com/archives/ba-he-yi-jiao-ben-yu-ming-fen-liu-jiao-cheng \n"
+    echoContent yellow "# 使用教程：https://www.multi-proxy.com/archives/ba-he-yi-jiao-ben-yu-ming-fen-liu-jiao-cheng \n"
 
     echoContent yellow "1.添加"
     echoContent yellow "2.卸载"
@@ -6857,7 +6863,7 @@ sniRouting() {
     echoContent skyBlue "\n功能 1/${totalProgress} : SNI反向代理分流"
     echoContent red "\n=============================================================="
     echoContent yellow "# 注意事项"
-    echoContent yellow "# 使用教程：https://www.v2ray-agent.com/archives/ba-he-yi-jiao-ben-yu-ming-fen-liu-jiao-cheng \n"
+    echoContent yellow "# 使用教程：https://www.multi-proxy.com/archives/ba-he-yi-jiao-ben-yu-ming-fen-liu-jiao-cheng \n"
 
     echoContent yellow "1.添加"
     echoContent yellow "2.卸载"
@@ -7287,7 +7293,7 @@ unInstallHysteriaCore() {
 
         deleteHysteriaPortHoppingRules
         handleHysteria stop
-        rm -rf /etc/v2ray-agent/hysteria/*
+        rm -rf /etc/multi-proxy/hysteria/*
         rm ${configPath}02_socks_inbounds_hysteria.json
         rm -rf /etc/systemd/system/hysteria.service
         echoContent green " ---> 卸载完成"
@@ -7301,7 +7307,7 @@ unInstallTuicCore() {
         echoContent yellow " ---> 新版本依赖sing-box，检测到旧版本Tuic，执行卸载操作"
 
         handleTuic stop
-        rm -rf /etc/v2ray-agent/tuic/*
+        rm -rf /etc/multi-proxy/tuic/*
         rm -rf /etc/systemd/system/tuic.service
         echoContent green " ---> 卸载完成"
     fi
@@ -7318,8 +7324,8 @@ unInstallXrayCoreReality() {
     echoContent yellow "# 仅删除VLESS Reality相关配置，不会删除其他内容。"
     echoContent yellow "# 如果需要卸载其他内容，请卸载脚本功能"
     handleXray stop
-    rm /etc/v2ray-agent/xray/conf/07_VLESS_vision_reality_inbounds.json
-    rm /etc/v2ray-agent/xray/conf/08_VLESS_reality_fallback_grpc_inbounds.json
+    rm /etc/multi-proxy/xray/conf/07_VLESS_vision_reality_inbounds.json
+    rm /etc/multi-proxy/xray/conf/08_VLESS_reality_fallback_grpc_inbounds.json
     echoContent green " ---> 卸载完成"
 }
 
@@ -7353,8 +7359,8 @@ cronFunction() {
         renewalTLS
         exit 0
     elif [[ "${cronName}" == "UpdateGeo" ]]; then
-        updateGeoSite >>/etc/v2ray-agent/crontab_updateGeoSite.log
-        echoContent green " ---> geo更新日期:$(date "+%F %H:%M:%S")" >>/etc/v2ray-agent/crontab_updateGeoSite.log
+        updateGeoSite >>/etc/multi-proxy/crontab_updateGeoSite.log
+        echoContent green " ---> geo更新日期:$(date "+%F %H:%M:%S")" >>/etc/multi-proxy/crontab_updateGeoSite.log
         exit 0
     fi
 }
@@ -7401,9 +7407,9 @@ addSubscribeMenu() {
     if [[ "${addSubscribeStatus}" == "1" ]]; then
         addOtherSubscribe
     elif [[ "${addSubscribeStatus}" == "2" ]]; then
-        rm -rf /etc/v2ray-agent/subscribe_remote/clashMeta/*
-        rm -rf /etc/v2ray-agent/subscribe_remote/default/*
-        echo >/etc/v2ray-agent/subscribe_remote/remoteSubscribeUrl
+        rm -rf /etc/multi-proxy/subscribe_remote/clashMeta/*
+        rm -rf /etc/multi-proxy/subscribe_remote/default/*
+        echo >/etc/multi-proxy/subscribe_remote/remoteSubscribeUrl
         echoContent green " ---> 其他机器订阅删除成功"
         subscribe
     fi
@@ -7411,8 +7417,8 @@ addSubscribeMenu() {
 # 添加其他机器clashMeta订阅
 addOtherSubscribe() {
     echoContent yellow "#注意事项:"
-    echoContent yellow "请仔细阅读以下文章： https://www.v2ray-agent.com/archives/1681804748677"
-    echoContent skyBlue "录入示例：www.v2ray-agent.com:443:vps1\n"
+    echoContent yellow "请仔细阅读以下文章： https://www.multi-proxy.com/archives/1681804748677"
+    echoContent skyBlue "录入示例：www.multi-proxy.com:443:vps1\n"
     read -r -p "请输入域名 端口 机器别名:" remoteSubscribeUrl
     if [[ -z "${remoteSubscribeUrl}" ]]; then
         echoContent red " ---> 不可为空"
@@ -7420,19 +7426,19 @@ addOtherSubscribe() {
     elif ! echo "${remoteSubscribeUrl}" | grep -q ":"; then
         echoContent red " ---> 规则不合法"
     else
-        echo "${remoteSubscribeUrl}" >>/etc/v2ray-agent/subscribe_remote/remoteSubscribeUrl
+        echo "${remoteSubscribeUrl}" >>/etc/multi-proxy/subscribe_remote/remoteSubscribeUrl
         local remoteUrl=
         remoteUrl=$(echo "${remoteSubscribeUrl}" | awk -F "[:]" '{print $1":"$2}')
 
         local serverAlias=
         serverAlias=$(echo "${remoteSubscribeUrl}" | awk -F "[:]" '{print $3}')
 
-        if [[ -n $(ls /etc/v2ray-agent/subscribe/clashMeta/) || -n $(ls /etc/v2ray-agent/subscribe/default/) ]]; then
-            find /etc/v2ray-agent/subscribe_local/default/* | while read -r email; do
+        if [[ -n $(ls /etc/multi-proxy/subscribe/clashMeta/) || -n $(ls /etc/multi-proxy/subscribe/default/) ]]; then
+            find /etc/multi-proxy/subscribe_local/default/* | while read -r email; do
                 email=$(echo "${email}" | awk -F "[d][e][f][a][u][l][t][/]" '{print $2}')
 
                 local emailMd5=
-                emailMd5=$(echo -n "${email}$(cat "/etc/v2ray-agent/subscribe_local/subscribeSalt")"$'\n' | md5sum | awk '{print $1}')
+                emailMd5=$(echo -n "${email}$(cat "/etc/multi-proxy/subscribe_local/subscribeSalt")"$'\n' | md5sum | awk '{print $1}')
 
                 local clashMetaProxies=
                 clashMetaProxies=$(curl -s -4 "https://${remoteUrl}/s/clashMeta/${emailMd5}" | sed '/proxies:/d' | sed "s/${email}/${email}_${serverAlias}/g")
@@ -7441,8 +7447,8 @@ addOtherSubscribe() {
                 default=$(curl -s -4 "https://${remoteUrl}/s/default/${emailMd5}" | base64 -d | sed "s/${email}/${email}_${serverAlias}/g")
 
                 if echo "${default}" | grep -q "${email}"; then
-                    echo "${default}" >>"/etc/v2ray-agent/subscribe/default/${emailMd5}"
-                    echo "${default}" >>"/etc/v2ray-agent/subscribe_remote/default/${email}"
+                    echo "${default}" >>"/etc/multi-proxy/subscribe/default/${emailMd5}"
+                    echo "${default}" >>"/etc/multi-proxy/subscribe_remote/default/${email}"
 
                     echoContent green " ---> 通用订阅 ${email} 添加成功"
                 else
@@ -7450,8 +7456,8 @@ addOtherSubscribe() {
                 fi
 
                 if echo "${clashMetaProxies}" | grep -q "${email}"; then
-                    echo "${clashMetaProxies}" >>"/etc/v2ray-agent/subscribe/clashMeta/${emailMd5}"
-                    echo "${clashMetaProxies}" >>"/etc/v2ray-agent/subscribe_remote/clashMeta/${email}"
+                    echo "${clashMetaProxies}" >>"/etc/multi-proxy/subscribe/clashMeta/${emailMd5}"
+                    echo "${clashMetaProxies}" >>"/etc/multi-proxy/subscribe_remote/clashMeta/${email}"
 
                     echoContent green " ---> clashMeta订阅 ${email} 添加成功"
                 else
@@ -7467,7 +7473,7 @@ addOtherSubscribe() {
 clashMetaConfig() {
     local url=$1
     local id=$2
-    cat <<EOF >"/etc/v2ray-agent/subscribe/clashMetaProfiles/${id}"
+    cat <<EOF >"/etc/multi-proxy/subscribe/clashMetaProfiles/${id}"
 mixed-port: 7890
 unified-delay: false
 geodata-mode: true
@@ -7849,10 +7855,10 @@ subscribe() {
         echoContent red "# 需要手动输入md5加密的salt值，如果不了解使用随机即可"
         echoContent yellow "# 不影响已添加的远程订阅的内容\n"
 
-        if [[ -f "/etc/v2ray-agent/subscribe_local/subscribeSalt" && -n $(cat "/etc/v2ray-agent/subscribe_local/subscribeSalt") ]]; then
+        if [[ -f "/etc/multi-proxy/subscribe_local/subscribeSalt" && -n $(cat "/etc/multi-proxy/subscribe_local/subscribeSalt") ]]; then
             read -r -p "读取到上次安装设置的Salt，是否使用上次生成的Salt ？[y/n]:" historySaltStatus
             if [[ "${historySaltStatus}" == "y" ]]; then
-                subscribeSalt=$(cat /etc/v2ray-agent/subscribe_local/subscribeSalt)
+                subscribeSalt=$(cat /etc/multi-proxy/subscribe_local/subscribeSalt)
             else
                 read -r -p "请输入salt值, [回车]使用随机:" subscribeSalt
             fi
@@ -7865,37 +7871,37 @@ subscribe() {
         fi
         echoContent yellow "\n ---> Salt: ${subscribeSalt}"
 
-        echo "${subscribeSalt}" >/etc/v2ray-agent/subscribe_local/subscribeSalt
+        echo "${subscribeSalt}" >/etc/multi-proxy/subscribe_local/subscribeSalt
 
-        rm -rf /etc/v2ray-agent/subscribe/default/*
-        rm -rf /etc/v2ray-agent/subscribe/clashMeta/*
-        rm -rf /etc/v2ray-agent/subscribe_local/default/*
-        rm -rf /etc/v2ray-agent/subscribe_local/clashMeta/*
+        rm -rf /etc/multi-proxy/subscribe/default/*
+        rm -rf /etc/multi-proxy/subscribe/clashMeta/*
+        rm -rf /etc/multi-proxy/subscribe_local/default/*
+        rm -rf /etc/multi-proxy/subscribe_local/clashMeta/*
         showAccounts >/dev/null
 
-        if [[ -n $(ls /etc/v2ray-agent/subscribe_local/default/) ]]; then
-            find /etc/v2ray-agent/subscribe_local/default/* | while read -r email; do
+        if [[ -n $(ls /etc/multi-proxy/subscribe_local/default/) ]]; then
+            find /etc/multi-proxy/subscribe_local/default/* | while read -r email; do
                 email=$(echo "${email}" | awk -F "[d][e][f][a][u][l][t][/]" '{print $2}')
                 # md5加密
                 local emailMd5=
                 emailMd5=$(echo -n "${email}${subscribeSalt}"$'\n' | md5sum | awk '{print $1}')
 
-                cat "/etc/v2ray-agent/subscribe_local/default/${email}" >>"/etc/v2ray-agent/subscribe/default/${emailMd5}"
+                cat "/etc/multi-proxy/subscribe_local/default/${email}" >>"/etc/multi-proxy/subscribe/default/${emailMd5}"
 
-                if [[ -f "/etc/v2ray-agent/subscribe_remote/default/${email}" ]]; then
-                    echo >"/etc/v2ray-agent/subscribe_remote/default/${email}_tmp"
+                if [[ -f "/etc/multi-proxy/subscribe_remote/default/${email}" ]]; then
+                    echo >"/etc/multi-proxy/subscribe_remote/default/${email}_tmp"
                     while read -r remoteUrl; do
                         updateRemoteSubscribe "${emailMd5}" "${email}" "${remoteUrl}" "default"
-                    done < <(grep "VLESS_TCP/TLS_Vision" <"/etc/v2ray-agent/subscribe_remote/default/${email}" | awk -F "@" '{print $2}' | awk -F "?" '{print $1}')
+                    done < <(grep "VLESS_TCP/TLS_Vision" <"/etc/multi-proxy/subscribe_remote/default/${email}" | awk -F "@" '{print $2}' | awk -F "?" '{print $1}')
 
-                    echo >"/etc/v2ray-agent/subscribe_remote/default/${email}"
-                    cat "/etc/v2ray-agent/subscribe_remote/default/${email}_tmp" >"/etc/v2ray-agent/subscribe_remote/default/${email}"
-                    cat "/etc/v2ray-agent/subscribe_remote/default/${email}" >>"/etc/v2ray-agent/subscribe/default/${emailMd5}"
+                    echo >"/etc/multi-proxy/subscribe_remote/default/${email}"
+                    cat "/etc/multi-proxy/subscribe_remote/default/${email}_tmp" >"/etc/multi-proxy/subscribe_remote/default/${email}"
+                    cat "/etc/multi-proxy/subscribe_remote/default/${email}" >>"/etc/multi-proxy/subscribe/default/${emailMd5}"
                 fi
 
                 local base64Result
-                base64Result=$(base64 -w 0 "/etc/v2ray-agent/subscribe/default/${emailMd5}")
-                echo "${base64Result}" >"/etc/v2ray-agent/subscribe/default/${emailMd5}"
+                base64Result=$(base64 -w 0 "/etc/multi-proxy/subscribe/default/${emailMd5}")
+                echo "${base64Result}" >"/etc/multi-proxy/subscribe/default/${emailMd5}"
 
                 echoContent yellow "--------------------------------------------------------------"
                 local currentDomain=${currentHost}
@@ -7910,21 +7916,21 @@ subscribe() {
                 echo "https://${currentDomain}/s/default/${emailMd5}" | qrencode -s 10 -m 1 -t UTF8
 
                 # clashMeta
-                if [[ -f "/etc/v2ray-agent/subscribe_local/clashMeta/${email}" ]]; then
+                if [[ -f "/etc/multi-proxy/subscribe_local/clashMeta/${email}" ]]; then
 
-                    cat "/etc/v2ray-agent/subscribe_local/clashMeta/${email}" >>"/etc/v2ray-agent/subscribe/clashMeta/${emailMd5}"
+                    cat "/etc/multi-proxy/subscribe_local/clashMeta/${email}" >>"/etc/multi-proxy/subscribe/clashMeta/${emailMd5}"
 
-                    if [[ -f "/etc/v2ray-agent/subscribe_remote/clashMeta/${email}" ]]; then
-                        echo >"/etc/v2ray-agent/subscribe_remote/clashMeta/${email}_tmp"
+                    if [[ -f "/etc/multi-proxy/subscribe_remote/clashMeta/${email}" ]]; then
+                        echo >"/etc/multi-proxy/subscribe_remote/clashMeta/${email}_tmp"
                         while read -r remoteUrl; do
                             updateRemoteSubscribe "${emailMd5}" "${email}" "${remoteUrl}" "ClashMeta"
-                        done < <(grep -A3 "VLESS_TCP/TLS_Vision" <"/etc/v2ray-agent/subscribe_remote/clashMeta/${email}" | awk '/server:|port:/ {print $2}' | paste -d ':' - -)
-                        echo >"/etc/v2ray-agent/subscribe_remote/clashMeta/${email}"
-                        cat "/etc/v2ray-agent/subscribe_remote/clashMeta/${email}_tmp" >"/etc/v2ray-agent/subscribe_remote/clashMeta/${email}"
-                        cat "/etc/v2ray-agent/subscribe_remote/clashMeta/${email}" >>"/etc/v2ray-agent/subscribe/clashMeta/${emailMd5}"
+                        done < <(grep -A3 "VLESS_TCP/TLS_Vision" <"/etc/multi-proxy/subscribe_remote/clashMeta/${email}" | awk '/server:|port:/ {print $2}' | paste -d ':' - -)
+                        echo >"/etc/multi-proxy/subscribe_remote/clashMeta/${email}"
+                        cat "/etc/multi-proxy/subscribe_remote/clashMeta/${email}_tmp" >"/etc/multi-proxy/subscribe_remote/clashMeta/${email}"
+                        cat "/etc/multi-proxy/subscribe_remote/clashMeta/${email}" >>"/etc/multi-proxy/subscribe/clashMeta/${emailMd5}"
                     fi
 
-                    sed -i '1i\proxies:' "/etc/v2ray-agent/subscribe/clashMeta/${emailMd5}"
+                    sed -i '1i\proxies:' "/etc/multi-proxy/subscribe/clashMeta/${emailMd5}"
 
                     local clashProxyUrl="https://${currentDomain}/s/clashMeta/${emailMd5}"
                     clashMetaConfig "${clashProxyUrl}" "${emailMd5}"
@@ -7951,13 +7957,13 @@ updateRemoteSubscribe() {
     local remoteDomain=
     remoteDomain=$(echo "${remoteUrl}" | awk -F ":" '{print $1}')
     local serverAlias=
-    serverAlias=$(grep "${remoteDomain}" <"/etc/v2ray-agent/subscribe_remote/remoteSubscribeUrl" | awk -F ":" '{print $3}')
+    serverAlias=$(grep "${remoteDomain}" <"/etc/multi-proxy/subscribe_remote/remoteSubscribeUrl" | awk -F ":" '{print $3}')
 
     if [[ "${type}" == "ClashMeta" ]]; then
         local clashMetaProxies=
         clashMetaProxies=$(curl -s -4 "https://${remoteUrl}/s/clashMeta/${emailMD5}" | sed '/proxies:/d' | sed "s/${email}/${email}_${serverAlias}/g")
         if echo "${clashMetaProxies}" | grep -q "${email}"; then
-            echo "${clashMetaProxies}" >>"/etc/v2ray-agent/subscribe_remote/clashMeta/${email}_tmp"
+            echo "${clashMetaProxies}" >>"/etc/multi-proxy/subscribe_remote/clashMeta/${email}_tmp"
 
             echoContent green " ---> clashMeta订阅 ${remoteDomain}:${email} 更新成功"
         else
@@ -7967,7 +7973,7 @@ updateRemoteSubscribe() {
         local default=
         default=$(curl -s -4 "https://${remoteUrl}/s/default/${emailMD5}" | base64 -d | sed "s/${email}/${email}_${serverAlias}/g")
         if echo "${default}" | grep -q "${email}"; then
-            echo "${default}" >>"/etc/v2ray-agent/subscribe_remote/default/${email}_tmp"
+            echo "${default}" >>"/etc/multi-proxy/subscribe_remote/default/${email}_tmp"
 
             echoContent green " ---> 通用订阅 ${remoteDomain}:${email} 更新成功"
         else
@@ -8030,7 +8036,7 @@ initRealityKey() {
         fi
     fi
     if [[ -z "${realityPrivateKey}" ]]; then
-        realityX25519Key=$(/etc/v2ray-agent/xray/xray x25519)
+        realityX25519Key=$(/etc/multi-proxy/xray/xray x25519)
         realityPrivateKey=$(echo "${realityX25519Key}" | head -1 | awk '{print $3}')
         realityPublicKey=$(echo "${realityX25519Key}" | tail -n 1 | awk '{print $3}')
     fi
@@ -8060,7 +8066,7 @@ initRealityDest() {
         realityDestDomainList="gateway.icloud.com,itunes.apple.com,swdist.apple.com,swcdn.apple.com,updates.cdn-apple.com,mensura.cdn-apple.com,osxapps.itunes.apple.com,aod.itunes.apple.com,download-installer.cdn.mozilla.net,addons.mozilla.org,s0.awsstatic.com,d1.awsstatic.com,images-na.ssl-images-amazon.com,m.media-amazon.com,player.live-video.net,one-piece.com,lol.secure.dyn.riotcdn.net,www.lovelive-anime.jp,www.nokia.com"
 
         echoContent skyBlue "\n===== 生成配置回落的域名 例如:[addons.mozilla.org:443] ======\n"
-        echoContent green "回落域名列表：https://www.v2ray-agent.com/archives/1680104902581#heading-8\n"
+        echoContent green "回落域名列表：https://www.multi-proxy.com/archives/1680104902581#heading-8\n"
         read -r -p "请输入[回车]使用随机:" realityDestDomain
         if [[ -z "${realityDestDomain}" ]]; then
             local randomNum=
@@ -8087,7 +8093,7 @@ initRealityClientServersName() {
     else
         echoContent skyBlue "\n================ 配置客户端可用的serverNames ================\n"
         echoContent yellow "#注意事项"
-        echoContent green "客户端可用的serverNames 列表：https://www.v2ray-agent.com/archives/1680104902581#heading-8\n"
+        echoContent green "客户端可用的serverNames 列表：https://www.multi-proxy.com/archives/1680104902581#heading-8\n"
         echoContent yellow "录入示例:addons.mozilla.org\n"
         read -r -p "请输入[回车]使用随机:" realityServerNames
         if [[ -z "${realityServerNames}" ]]; then
@@ -8216,10 +8222,10 @@ manageReality() {
 }
 # 安装reality scanner
 installRealityScanner() {
-    if [[ ! -f "/etc/v2ray-agent/xray/reality_scan/RealiTLScanner-linux-64" ]]; then
+    if [[ ! -f "/etc/multi-proxy/xray/reality_scan/RealiTLScanner-linux-64" ]]; then
         version=$(curl -s https://api.github.com/repos/XTLS/RealiTLScanner/releases?per_page=1 | jq -r '.[]|.tag_name')
-        wget -c -q -P /etc/v2ray-agent/xray/reality_scan/ "https://github.com/XTLS/RealiTLScanner/releases/download/${version}/RealiTLScanner-linux-64"
-        chmod 655 /etc/v2ray-agent/xray/reality_scan/RealiTLScanner-linux-64
+        wget -c -q -P /etc/multi-proxy/xray/reality_scan/ "https://github.com/XTLS/RealiTLScanner/releases/download/${version}/RealiTLScanner-linux-64"
+        chmod 655 /etc/multi-proxy/xray/reality_scan/RealiTLScanner-linux-64
     fi
 }
 # reality scanner
@@ -8255,8 +8261,8 @@ realityScanner() {
 
     read -r -p "IP是否正确？[y/n]:" ipStatus
     if [[ "${ipStatus}" == "y" ]]; then
-        echoContent yellow "结果存储在 /etc/v2ray-agent/xray/reality_scan/result.log 文件中\n"
-        /etc/v2ray-agent/xray/reality_scan/RealiTLScanner-linux-64 -addr "${publicIP}" | tee /etc/v2ray-agent/xray/reality_scan/result.log
+        echoContent yellow "结果存储在 /etc/multi-proxy/xray/reality_scan/result.log 文件中\n"
+        /etc/multi-proxy/xray/reality_scan/RealiTLScanner-linux-64 -addr "${publicIP}" | tee /etc/multi-proxy/xray/reality_scan/result.log
     else
         echoContent red " ---> 无法读取正确IP"
     fi
@@ -8266,7 +8272,7 @@ manageHysteria() {
     echoContent skyBlue "\n进度  1/1 : Hysteria2 管理"
     echoContent red "\n=============================================================="
     local hysteria2Status=
-    if [[ -n "${singBoxConfigPath}" ]] && [[ -f "/etc/v2ray-agent/sing-box/conf/config.json" ]] && grep -q 'hysteria2' </etc/v2ray-agent/sing-box/conf/config.json; then
+    if [[ -n "${singBoxConfigPath}" ]] && [[ -f "/etc/multi-proxy/sing-box/conf/config.json" ]] && grep -q 'hysteria2' </etc/multi-proxy/sing-box/conf/config.json; then
         echoContent yellow " 依赖第三方sing-box\n"
         echoContent yellow "1.重新安装"
         echoContent yellow "2.卸载"
@@ -8293,7 +8299,7 @@ manageTuic() {
     echoContent skyBlue "\n进度  1/1 : Tuic管理"
     echoContent red "\n=============================================================="
     local tuicStatus=
-    if [[ -n "${singBoxConfigPath}" ]] && [[ -f "/etc/v2ray-agent/sing-box/conf/config.json" ]] && grep -q 'tuic' </etc/v2ray-agent/sing-box/conf/config.json; then
+    if [[ -n "${singBoxConfigPath}" ]] && [[ -f "/etc/multi-proxy/sing-box/conf/config.json" ]] && grep -q 'tuic' </etc/multi-proxy/sing-box/conf/config.json; then
         echoContent yellow " 依赖第三方sing-box\n"
         echoContent yellow "1.重新安装"
         echoContent yellow "2.卸载"
@@ -8316,12 +8322,12 @@ manageTuic() {
 }
 # sing-box log日志
 singBoxLog() {
-    cat <<EOF >/etc/v2ray-agent/sing-box/conf/config/log.json
+    cat <<EOF >/etc/multi-proxy/sing-box/conf/config/log.json
         {
           "log": {
             "disabled": $1,
             "level": "debug",
-            "output": "/etc/v2ray-agent/sing-box/box.log",
+            "output": "/etc/multi-proxy/sing-box/box.log",
             "timestamp": true
           }
         }
@@ -8333,7 +8339,7 @@ EOF
 # hysteria版本管理
 hysteriaVersionManageMenu() {
     echoContent skyBlue "\n进度  $1/${totalProgress} : Hysteria版本管理"
-    if [[ ! -d "/etc/v2ray-agent/hysteria/" ]]; then
+    if [[ ! -d "/etc/multi-proxy/hysteria/" ]]; then
         echoContent red " ---> 没有检测到安装目录，请执行脚本安装内容"
         menu
         exit 0
@@ -8362,7 +8368,7 @@ hysteriaVersionManageMenu() {
 # sing-box 版本管理
 singBoxVersionManageMenu() {
     echoContent skyBlue "\n进度  $1/${totalProgress} : sing-box 版本管理"
-    if [[ ! -f "/etc/v2ray-agent/sing-box/sing-box" ]]; then
+    if [[ ! -f "/etc/multi-proxy/sing-box/sing-box" ]]; then
         echoContent red " ---> 没有检测到安装程序，请执行脚本安装内容"
         menu
         exit 0
@@ -8409,7 +8415,7 @@ singBoxVersionManageMenu() {
 # Tuic版本管理
 tuicVersionManageMenu() {
     echoContent skyBlue "\n进度  $1/${totalProgress} : Tuic版本管理"
-    if [[ ! -d "/etc/v2ray-agent/tuic/" ]]; then
+    if [[ ! -d "/etc/multi-proxy/tuic/" ]]; then
         echoContent red " ---> 没有检测到安装目录，请执行脚本安装内容"
         menu
         exit 0
@@ -8438,16 +8444,15 @@ tuicVersionManageMenu() {
 menu() {
     cd "$HOME" || exit
     echoContent red "\n=============================================================="
-    echoContent green "作者：mack-a"
-    echoContent green "当前版本：v2.11.25"
-    echoContent green "Github：https://github.com/mack-a/v2ray-agent"
+    echoContent green "作者：k"
+    echoContent green "当前版本：v0.0.01"
+    echoContent green "Github：https://github.com/multiProxy/multiProxy"
     echoContent green "描述：八合一共存脚本\c"
     showInstallStatus
     checkWgetShowProgress
-    echoContent red "\n=========================== 推广区============================"
+    echoContent red "\n=========================== 注意事项 ============================"
     echoContent red "                                              "
-    echoContent green "VPS选购攻略：https://www.v2ray-agent.com/archives/1679975663984"
-    echoContent green "年付10美金低价VPS AS4837：https://www.v2ray-agent.com/archives/racknerdtao-can-zheng-li-nian-fu-10mei-yuan"
+    echoContent green "脚本的调用快捷方式：mp"
     echoContent red "=============================================================="
     if [[ -n "${coreInstallType}" ]]; then
         echoContent yellow "1.重新安装"
@@ -8484,7 +8489,9 @@ menu() {
     echoContent yellow "20.卸载脚本"
     echoContent red "=============================================================="
     mkdirTools
-    aliasInstall
+    aliasInstall  # 安装脚本的快捷方式
+
+    # 读取输入
     read -r -p "请选择:" selectInstallType
     case ${selectInstallType} in
     1)
