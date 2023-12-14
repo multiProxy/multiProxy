@@ -2640,7 +2640,7 @@ initXrayClients() {
     local newEmail=$3
     if [[ -n "${newUUID}" ]]; then
         local newUser=
-        newUser="{\"id\":\"${uuid}\",\"flow\":\"xtls-rprx-vision\",\"email\":\"${newEmail}-VLESS_TCP/TLS_Vision\"}"
+        newUser="{\"id\":\"${uuid}\",\"flow\":\"xtls-rprx-vision\",\"email\":\"${newEmail}_VLESS-TCP/TLS-Vision\"}"
         currentClients=$(echo "${currentClients}" | jq -r ". +=[${newUser}]")
     fi
     local users=
@@ -2650,64 +2650,64 @@ initXrayClients() {
         email=$(echo "${user}" | jq -r .email | awk -F "[-]" '{print $1}')
         currentUser=
         if echo "${type}" | grep -q "0"; then
-            currentUser="{\"id\":\"${uuid}\",\"flow\":\"xtls-rprx-vision\",\"email\":\"${email}-VLESS_TCP/TLS_Vision\"}"
+            currentUser="{\"id\":\"${uuid}\",\"flow\":\"xtls-rprx-vision\",\"email\":\"${email}_VLESS-TCP/TLS-Vision\"}"
             users=$(echo "${users}" | jq -r ". +=[${currentUser}]")
         fi
 
         # VLESS WS
         if echo "${type}" | grep -q "1"; then
-            currentUser="{\"id\":\"${uuid}\",\"email\":\"${email}-VLESS_WS\"}"
+            currentUser="{\"id\":\"${uuid}\",\"email\":\"${email}_VLESS-WS\"}"
             users=$(echo "${users}" | jq -r ". +=[${currentUser}]")
         fi
         # trojan grpc
         if echo "${type}" | grep -q "2"; then
-            currentUser="{\"password\":\"${uuid}\",\"email\":\"${email}-Trojan_gRPC\"}"
+            currentUser="{\"password\":\"${uuid}\",\"email\":\"${email}_Trojan-gRPC\"}"
             users=$(echo "${users}" | jq -r ". +=[${currentUser}]")
         fi
         # VMess WS
         if echo "${type}" | grep -q "3"; then
-            currentUser="{\"id\":\"${uuid}\",\"email\":\"${email}-VMess_WS\",\"alterId\": 0}"
+            currentUser="{\"id\":\"${uuid}\",\"email\":\"${email}_VMess-WS\",\"alterId\": 0}"
 
             users=$(echo "${users}" | jq -r ". +=[${currentUser}]")
         fi
 
         # trojan tcp
         if echo "${type}" | grep -q "4"; then
-            currentUser="{\"password\":\"${uuid}\",\"email\":\"${email}-trojan_tcp\"}"
+            currentUser="{\"password\":\"${uuid}\",\"email\":\"${email}_trojan-tcp\"}"
 
             users=$(echo "${users}" | jq -r ". +=[${currentUser}]")
         fi
 
         # vless grpc
         if echo "${type}" | grep -q "5"; then
-            currentUser="{\"id\":\"${uuid}\",\"email\":\"${email}-vless_grpc\"}"
+            currentUser="{\"id\":\"${uuid}\",\"email\":\"${email}_vless-grpc\"}"
 
             users=$(echo "${users}" | jq -r ". +=[${currentUser}]")
         fi
 
         # hysteria
         if echo "${type}" | grep -q "6"; then
-            currentUser="{\"password\":\"${uuid}\",\"name\":\"${email}-singbox_hysteria2\"}"
+            currentUser="{\"password\":\"${uuid}\",\"name\":\"${email}_singbox-hysteria2\"}"
 
             users=$(echo "${users}" | jq -r ". +=[${currentUser}]")
         fi
 
         # vless reality vision
         if echo "${type}" | grep -q "7"; then
-            currentUser="{\"id\":\"${uuid}\",\"email\":\"${email}-vless_reality_vision\",\"flow\":\"xtls-rprx-vision\"}"
+            currentUser="{\"id\":\"${uuid}\",\"email\":\"${email}_vless-reality-vision\",\"flow\":\"xtls-rprx-vision\"}"
 
             users=$(echo "${users}" | jq -r ". +=[${currentUser}]")
         fi
 
         # vless reality grpc
         if echo "${type}" | grep -q "8"; then
-            currentUser="{\"id\":\"${uuid}\",\"email\":\"${email}-vless_reality_grpc\",\"flow\":\"\"}"
+            currentUser="{\"id\":\"${uuid}\",\"email\":\"${email}_vless-reality-grpc\",\"flow\":\"\"}"
 
             users=$(echo "${users}" | jq -r ". +=[${currentUser}]")
         fi
         # tuic
         if echo "${type}" | grep -q "9"; then
-            currentUser="{\"uuid\":\"${uuid}\",\"password\":\"${uuid}\",\"name\":\"${email}-singbox_tuic\"}"
+            currentUser="{\"uuid\":\"${uuid}\",\"password\":\"${uuid}\",\"name\":\"${email}_singbox-tuic\"}"
 
             users=$(echo "${users}" | jq -r ". +=[${currentUser}]")
         fi
