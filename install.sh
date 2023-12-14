@@ -8453,6 +8453,7 @@ menu() {
     echoContent red "\n=========================== 注意事项 ============================"
     echoContent red "                                              "
     echoContent green "脚本的调用快捷方式：mp"
+    echoContent red "                                              "
     echoContent red "=============================================================="
     if [[ -n "${coreInstallType}" ]]; then
         echoContent yellow "1.重新安装"
